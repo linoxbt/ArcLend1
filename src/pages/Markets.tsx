@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, Wallet } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,38 +8,68 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { PrivacyBadge } from "@/components/PrivacyBadge";
 import { HealthGauge } from "@/components/HealthGauge";
-import { lendingPools, formatCurrency, type LendingPool } from "@/lib/mock-data";
+import { useWalletState, WalletButton } from "@/components/WalletButton";
+import { useToast } from "@/hooks/use-toast";
+
+interface Token {
+  symbol: string;
+  name: string;
+  icon: string;
+}
+
+interface Pool {
+  id: string;
+  token: Token;
+  supplyAPY: number;
+  borrowAPY: number;
+  totalLiquidity: string;
+  utilization: number;
+}
+
+// Pool configuration — these would be fetched from on-chain state when contracts are deployed
+const pools: Pool[] = [
+  { id: "1", token: { symbol: "SOL", name: "Solana", icon: "◎" }, supplyAPY: 0, borrowAPY: 0, totalLiquidity: "—", utilization: 0 },
+  { id: "2", token: { symbol: "USDC", name: "USD Coin", icon: "$" }, supplyAPY: 0, borrowAPY: 0, totalLiquidity: "—", utilization: 0 },
+  { id: "3", token: { symbol: "mSOL", name: "Marinade SOL", icon: "🌊" }, supplyAPY: 0, borrowAPY: 0, totalLiquidity: "—", utilization: 0 },
+  { id: "4", token: { symbol: "jitoSOL", name: "Jito SOL", icon: "⚡" }, supplyAPY: 0, borrowAPY: 0, totalLiquidity: "—", utilization: 0 },
+  { id: "5", token: { symbol: "BONK", name: "Bonk", icon: "🐕" }, supplyAPY: 0, borrowAPY: 0, totalLiquidity: "—", utilization: 0 },
+  { id: "6", token: { symbol: "RAY", name: "Raydium", icon: "☀" }, supplyAPY: 0, borrowAPY: 0, totalLiquidity: "—", utilization: 0 },
+];
 
 export default function Markets() {
-  const [sortBy, setSortBy] = useState<"supplyAPY" | "borrowAPY" | "totalLiquidity">("totalLiquidity");
-  const [selectedPool, setSelectedPool] = useState<LendingPool | null>(null);
+  const { connected } = useWalletState();
+  const { toast } = useToast();
+  const [selectedPool, setSelectedPool] = useState<Pool | null>(null);
   const [modalType, setModalType] = useState<"supply" | "borrow">("supply");
   const [amount, setAmount] = useState("");
 
-  const sorted = [...lendingPools].sort((a, b) => b[sortBy] - a[sortBy]);
-
-  const openModal = (pool: LendingPool, type: "supply" | "borrow") => {
+  const openModal = (pool: Pool, type: "supply" | "borrow") => {
+    if (!connected) {
+      toast({ title: "Connect wallet first", description: "Please connect your Solana wallet to supply or borrow.", variant: "destructive" });
+      return;
+    }
     setSelectedPool(pool);
     setModalType(type);
     setAmount("");
   };
 
+  const handleConfirm = () => {
+    toast({
+      title: "Contract Not Deployed",
+      description: "Deploy the ArcLend smart contracts to enable this action. See the Docs page for instructions.",
+    });
+    setSelectedPool(null);
+  };
+
   return (
     <DashboardLayout>
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-foreground">Lending Markets</h1>
-        <div className="flex gap-2">
-          {(["totalLiquidity", "supplyAPY", "borrowAPY"] as const).map((key) => (
-            <Button key={key} size="sm" variant={sortBy === key ? "default" : "outline"} onClick={() => setSortBy(key)} className="text-xs">
-              <ArrowUpDown className="mr-1 h-3 w-3" />
-              {key === "totalLiquidity" ? "Liquidity" : key === "supplyAPY" ? "Supply APY" : "Borrow APY"}
-            </Button>
-          ))}
-        </div>
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-xl font-bold text-foreground sm:text-2xl">Lending Markets</h1>
+        <PrivacyBadge />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {sorted.map((pool, i) => (
+        {pools.map((pool, i) => (
           <motion.div key={pool.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
             <Card className="glow-purple border-border bg-card transition-all hover:border-primary/30">
               <CardHeader className="pb-3">
@@ -58,21 +88,21 @@ export default function Markets() {
                 <div className="grid grid-cols-2 gap-3">
                   <div className="rounded-lg bg-secondary/50 p-2.5">
                     <p className="text-xs text-muted-foreground">Supply APY</p>
-                    <p className="text-lg font-bold text-success">{pool.supplyAPY}%</p>
+                    <p className="text-lg font-bold text-muted-foreground">{pool.supplyAPY ? `${pool.supplyAPY}%` : "—"}</p>
                   </div>
                   <div className="rounded-lg bg-secondary/50 p-2.5">
                     <p className="text-xs text-muted-foreground">Borrow APY</p>
-                    <p className="text-lg font-bold text-warning">{pool.borrowAPY}%</p>
+                    <p className="text-lg font-bold text-muted-foreground">{pool.borrowAPY ? `${pool.borrowAPY}%` : "—"}</p>
                   </div>
                 </div>
                 <div className="space-y-1.5 text-xs">
                   <div className="flex justify-between text-muted-foreground">
                     <span>Total Liquidity</span>
-                    <span className="text-foreground">{formatCurrency(pool.totalLiquidity)}</span>
+                    <span className="text-foreground">{pool.totalLiquidity}</span>
                   </div>
                   <div className="flex justify-between text-muted-foreground">
                     <span>Utilization</span>
-                    <span className="text-foreground">{pool.utilization}%</span>
+                    <span className="text-foreground">{pool.utilization ? `${pool.utilization}%` : "—"}</span>
                   </div>
                   <div className="h-1.5 overflow-hidden rounded-full bg-muted">
                     <div className="h-full rounded-full bg-primary" style={{ width: `${pool.utilization}%` }} />
@@ -96,7 +126,7 @@ export default function Markets() {
               {modalType === "supply" ? "Supply" : "Borrow"} {selectedPool?.token.symbol}
             </DialogTitle>
             <DialogDescription className="text-muted-foreground">
-              {modalType === "supply" ? `Earn ${selectedPool?.supplyAPY}% APY` : `Borrow at ${selectedPool?.borrowAPY}% APY`}
+              {modalType === "supply" ? "Supply assets to the lending pool" : "Borrow assets from the pool"}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-2">
@@ -107,11 +137,11 @@ export default function Markets() {
             <div className="rounded-lg border border-border bg-secondary/30 p-3 space-y-2 text-xs">
               <div className="flex justify-between text-muted-foreground">
                 <span>Health Factor Impact</span>
-                <HealthGauge value={amount ? 2.1 : 2.45} size="sm" />
+                <span className="text-foreground">—</span>
               </div>
               <PrivacyBadge />
             </div>
-            <Button className="w-full glow-purple" disabled={!amount}>
+            <Button className="w-full glow-purple" disabled={!amount} onClick={handleConfirm}>
               {modalType === "supply" ? "Confirm Supply" : "Confirm Borrow"}
             </Button>
           </div>

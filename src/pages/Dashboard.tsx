@@ -1,38 +1,55 @@
 import { motion } from "framer-motion";
-import { TrendingUp, TrendingDown, DollarSign, Percent } from "lucide-react";
-import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { TrendingUp, TrendingDown, DollarSign, Percent, Wallet } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { HealthGauge } from "@/components/HealthGauge";
 import { PrivacyBadge } from "@/components/PrivacyBadge";
-import { portfolioStats, earningsData, recentTransactions, formatCurrency } from "@/lib/mock-data";
-
-const stats = [
-  { label: "Total Supplied", value: formatCurrency(portfolioStats.totalSupplied), icon: TrendingUp, change: "+2.4%" },
-  { label: "Total Borrowed", value: formatCurrency(portfolioStats.totalBorrowed), icon: TrendingDown, change: "-0.8%" },
-  { label: "Net Worth", value: formatCurrency(portfolioStats.netWorth), icon: DollarSign, change: "+3.1%" },
-  { label: "Net APY", value: `${portfolioStats.netAPY}%`, icon: Percent, change: "+0.12%" },
-];
+import { useWalletState, WalletButton } from "@/components/WalletButton";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
+  const { connected } = useWalletState();
+  const navigate = useNavigate();
+
+  if (!connected) {
+    return (
+      <DashboardLayout>
+        <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
+          <Wallet className="mb-4 h-12 w-12 text-muted-foreground" />
+          <h2 className="mb-2 text-xl font-bold text-foreground">Connect Your Wallet</h2>
+          <p className="mb-6 max-w-md text-sm text-muted-foreground">
+            Connect your Solana wallet to view your portfolio, positions, and health factors.
+          </p>
+          <WalletButton />
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  // When connected but no on-chain program deployed yet, show placeholder state
   return (
     <DashboardLayout>
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-foreground">Portfolio Dashboard</h1>
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-xl font-bold text-foreground sm:text-2xl">Portfolio Dashboard</h1>
         <PrivacyBadge />
       </div>
 
-      <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map((s, i) => (
+      <div className="mb-6 grid gap-4 grid-cols-2 lg:grid-cols-4">
+        {[
+          { label: "Total Supplied", icon: TrendingUp, value: "$0.00" },
+          { label: "Total Borrowed", icon: TrendingDown, value: "$0.00" },
+          { label: "Net Worth", icon: DollarSign, value: "$0.00" },
+          { label: "Net APY", icon: Percent, value: "0.00%" },
+        ].map((s, i) => (
           <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
             <Card className="glow-purple border-border bg-card">
-              <CardContent className="p-5">
+              <CardContent className="p-4 sm:p-5">
                 <div className="mb-2 flex items-center justify-between">
                   <span className="text-xs text-muted-foreground">{s.label}</span>
                   <s.icon className="h-4 w-4 text-primary" />
                 </div>
-                <p className="text-2xl font-bold text-foreground">{s.value}</p>
-                <span className="text-xs text-success">{s.change}</span>
+                <p className="text-lg font-bold text-foreground sm:text-2xl">{s.value}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -45,20 +62,15 @@ export default function Dashboard() {
             <CardTitle className="text-sm text-foreground">Earnings Over Time</CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={240}>
-              <AreaChart data={earningsData}>
-                <defs>
-                  <linearGradient id="purpleGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="hsl(263, 70%, 58%)" stopOpacity={0.4} />
-                    <stop offset="100%" stopColor="hsl(263, 70%, 58%)" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <XAxis dataKey="date" tick={{ fill: "hsl(240,5%,55%)", fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: "hsl(240,5%,55%)", fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `$${v}`} />
-                <Tooltip contentStyle={{ background: "hsl(240,10%,6%)", border: "1px solid hsl(240,10%,16%)", borderRadius: 8, color: "#fff" }} />
-                <Area type="monotone" dataKey="earnings" stroke="hsl(263, 70%, 58%)" fill="url(#purpleGrad)" strokeWidth={2} />
-              </AreaChart>
-            </ResponsiveContainer>
+            <div className="flex h-60 items-center justify-center text-center">
+              <div>
+                <p className="text-sm text-muted-foreground">No earnings data yet</p>
+                <p className="mt-1 text-xs text-muted-foreground">Supply assets to start earning yield</p>
+                <Button size="sm" className="mt-4" onClick={() => navigate("/markets")}>
+                  Browse Markets
+                </Button>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
@@ -70,11 +82,10 @@ export default function Dashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col items-center gap-4">
-            <div className="flex h-32 w-32 items-center justify-center rounded-full border-4 border-success/30 bg-success/5">
-              <span className="text-3xl font-bold text-success">{portfolioStats.overallHealthFactor.toFixed(2)}</span>
+            <div className="flex h-32 w-32 items-center justify-center rounded-full border-4 border-muted/30 bg-muted/5">
+              <span className="text-3xl font-bold text-muted-foreground">—</span>
             </div>
-            <HealthGauge value={portfolioStats.overallHealthFactor} size="lg" />
-            <p className="text-center text-xs text-muted-foreground">Your overall health factor is in the safe zone</p>
+            <p className="text-center text-xs text-muted-foreground">No active positions</p>
           </CardContent>
         </Card>
       </div>
@@ -84,22 +95,8 @@ export default function Dashboard() {
           <CardTitle className="text-sm text-foreground">Recent Activity</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
-            {recentTransactions.map((tx) => (
-              <div key={tx.id} className="flex items-center justify-between rounded-lg border border-border bg-secondary/30 p-3">
-                <div className="flex items-center gap-3">
-                  <span className="text-lg">{tx.token.icon}</span>
-                  <div>
-                    <p className="text-sm font-medium capitalize text-foreground">{tx.type} {tx.token.symbol}</p>
-                    <p className="text-xs text-muted-foreground">{tx.timestamp.toLocaleDateString()}</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm font-mono text-foreground">{tx.amount.toLocaleString()} {tx.token.symbol}</p>
-                  <p className="text-xs text-muted-foreground">{tx.hash}</p>
-                </div>
-              </div>
-            ))}
+          <div className="flex h-32 items-center justify-center text-center">
+            <p className="text-sm text-muted-foreground">No recent transactions</p>
           </div>
         </CardContent>
       </Card>
