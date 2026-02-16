@@ -1,24 +1,26 @@
-import { useState } from "react";
-import { Wallet } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
 export function WalletButton() {
-  const [connected, setConnected] = useState(false);
-  const address = "8xK9...m3Fq";
-
-  if (connected) {
-    return (
-      <Button variant="outline" size="sm" className="border-primary/30 bg-primary/10 text-primary hover:bg-primary/20" onClick={() => setConnected(false)}>
-        <Wallet className="mr-2 h-4 w-4" />
-        {address}
-      </Button>
-    );
-  }
-
   return (
-    <Button className="glow-purple bg-primary text-primary-foreground hover:bg-primary/90" onClick={() => setConnected(true)}>
-      <Wallet className="mr-2 h-4 w-4" />
-      Connect Wallet
-    </Button>
+    <WalletMultiButton
+      style={{
+        backgroundColor: "hsl(263, 70%, 58%)",
+        borderRadius: "0.5rem",
+        fontSize: "0.875rem",
+        height: "2.5rem",
+        padding: "0 1rem",
+      }}
+    />
   );
+}
+
+export function useWalletState() {
+  const { publicKey, connected, connecting } = useWallet();
+  return {
+    publicKey,
+    connected,
+    connecting,
+    shortAddress: publicKey ? `${publicKey.toBase58().slice(0, 4)}...${publicKey.toBase58().slice(-4)}` : null,
+  };
 }

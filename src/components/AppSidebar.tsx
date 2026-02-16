@@ -1,55 +1,54 @@
-import { LayoutDashboard, Store, Layers, Activity } from "lucide-react";
-import { NavLink } from "@/components/NavLink";
+import { LayoutDashboard, Store, Layers, Activity, BookOpen, X } from "lucide-react";
+import { NavLink } from "react-router-dom";
 import logo from "@/assets/logo.png";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
 import { WalletButton } from "./WalletButton";
+import { cn } from "@/lib/utils";
 
 const items = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Markets", url: "/markets", icon: Store },
   { title: "Positions", url: "/positions", icon: Layers },
   { title: "Health Monitor", url: "/health", icon: Activity },
+  { title: "Docs", url: "/docs", icon: BookOpen },
 ];
 
-export function AppSidebar() {
+export function AppSidebar({ onClose }: { onClose: () => void }) {
   return (
-    <Sidebar className="border-r border-border bg-sidebar">
-      <div className="flex items-center gap-3 p-4">
-        <img src={logo} alt="ArcLend" className="h-8 w-8" />
-        <span className="text-lg font-bold text-foreground">ArcLend</span>
+    <div className="flex h-full flex-col border-r border-border bg-card">
+      <div className="flex items-center justify-between p-4">
+        <div className="flex items-center gap-3">
+          <img src={logo} alt="ArcLend" className="h-8 w-8" />
+          <span className="text-lg font-bold text-foreground">ArcLend</span>
+        </div>
+        <button onClick={onClose} className="text-muted-foreground md:hidden">
+          <X className="h-5 w-5" />
+        </button>
       </div>
 
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink to={item.url} className="hover:bg-sidebar-accent" activeClassName="bg-sidebar-accent text-primary font-medium">
-                      <item.icon className="mr-3 h-4 w-4" />
-                      <span>{item.title}</span>
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
+      <nav className="flex-1 space-y-1 px-3">
+        {items.map((item) => (
+          <NavLink
+            key={item.title}
+            to={item.url}
+            onClick={onClose}
+            className={({ isActive }) =>
+              cn(
+                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors",
+                isActive
+                  ? "bg-primary/10 font-medium text-primary"
+                  : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+              )
+            }
+          >
+            <item.icon className="h-4 w-4" />
+            <span>{item.title}</span>
+          </NavLink>
+        ))}
+      </nav>
 
-      <div className="mt-auto border-t border-border p-4">
+      <div className="border-t border-border p-4">
         <WalletButton />
       </div>
-    </Sidebar>
+    </div>
   );
 }
