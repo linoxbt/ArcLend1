@@ -1,39 +1,40 @@
 import { motion } from "framer-motion";
-import { Shield, Eye, Lock, Zap, ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowRight, Layers, ArrowLeftRight, Droplets, Coins, TrendingUp, Shield } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { WalletButton } from "@/components/WalletButton";
 import { useWalletState } from "@/components/WalletButton";
 import { Footer } from "@/components/Footer";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import logo from "@/assets/logo.png";
 
 const features = [
   {
-    icon: Shield,
-    title: "Encrypted Collateral",
-    desc: "Your collateral amounts remain hidden from other participants using Arcium's MPC network.",
+    icon: TrendingUp,
+    title: "Lending & Borrowing",
+    desc: "Supply assets to earn yield or borrow against your collateral across Base Sepolia and Rialo networks.",
   },
   {
-    icon: Eye,
-    title: "Hidden Health Factors",
-    desc: "Health factors computed in encrypted state — invisible to liquidation bots and MEV extractors.",
+    icon: ArrowLeftRight,
+    title: "Token Swap",
+    desc: "Swap between supported tokens instantly with minimal slippage on both networks.",
   },
   {
-    icon: Lock,
-    title: "Confidential Liquidations",
-    desc: "Liquidation thresholds stay private, preventing front-running attacks on vulnerable positions.",
+    icon: Droplets,
+    title: "Liquidity Pools",
+    desc: "Provide liquidity to earn trading fees and protocol rewards on your favorite pairs.",
   },
   {
-    icon: Zap,
-    title: "Solana Speed",
-    desc: "Sub-second finality with Solana's high-performance runtime. DeFi privacy without compromising speed.",
+    icon: Coins,
+    title: "Testnet Faucet",
+    desc: "Get free testnet tokens (USDT, WETH) on Base Sepolia and Rialo to start experimenting.",
   },
 ];
 
 const stats = [
-  { label: "Privacy Protocol", value: "Arcium MPC" },
-  { label: "Network", value: "Solana" },
-  { label: "Status", value: "Testnet" },
+  { label: "Networks", value: "2 Testnets" },
+  { label: "Base Sepolia", value: "ETH • WETH • USDT" },
+  { label: "Rialo Testnet", value: "RIA • WETH • USDT" },
 ];
 
 export default function Landing() {
@@ -42,7 +43,6 @@ export default function Landing() {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      {/* Nav */}
       <nav className="border-b border-border/50 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
           <div className="flex items-center gap-3">
@@ -50,18 +50,17 @@ export default function Landing() {
             <span className="text-lg font-bold text-foreground">ArcLend</span>
           </div>
           <div className="hidden items-center gap-6 md:flex">
-            <button onClick={() => navigate("/docs")} className="text-sm text-muted-foreground hover:text-foreground">
-              Docs
-            </button>
-            <a href="https://docs.arcium.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
-              Arcium <ExternalLink className="h-3 w-3" />
-            </a>
+            <button onClick={() => navigate("/markets")} className="text-sm text-muted-foreground hover:text-foreground">Markets</button>
+            <button onClick={() => navigate("/swap")} className="text-sm text-muted-foreground hover:text-foreground">Swap</button>
+            <button onClick={() => navigate("/docs")} className="text-sm text-muted-foreground hover:text-foreground">Docs</button>
           </div>
-          <WalletButton />
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <WalletButton />
+          </div>
         </div>
       </nav>
 
-      {/* Hero */}
       <main className="flex flex-1 flex-col">
         <section className="dot-grid flex flex-1 flex-col items-center justify-center px-4 py-16 sm:py-24">
           <motion.div
@@ -72,17 +71,17 @@ export default function Landing() {
           >
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs text-primary">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
-              Live on Solana Devnet
+              Live on Base Sepolia & Rialo Testnet
             </div>
 
             <h1 className="mb-6 text-4xl font-bold leading-tight tracking-tight text-foreground sm:text-6xl lg:text-7xl">
-              Private Lending
+              Multi-Chain DeFi
               <br />
-              <span className="text-gradient-purple">Powered by Arcium</span>
+              <span className="text-gradient-purple">Lending Protocol</span>
             </h1>
 
             <p className="mx-auto mb-10 max-w-2xl text-base text-muted-foreground sm:text-lg">
-              The first lending protocol where your positions, health factors, and liquidation thresholds are encrypted end-to-end using multi-party computation.
+              Lend, borrow, swap, and provide liquidity across Base Sepolia and Rialo testnets. The complete DeFi experience with full EVM compatibility.
             </p>
 
             <div className="mb-16 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
@@ -108,7 +107,6 @@ export default function Landing() {
             </div>
           </motion.div>
 
-          {/* Stats bar */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -123,7 +121,6 @@ export default function Landing() {
             ))}
           </motion.div>
 
-          {/* Features */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -145,16 +142,15 @@ export default function Landing() {
           </motion.div>
         </section>
 
-        {/* How it works */}
         <section className="border-t border-border bg-card/50 px-4 py-16 sm:py-24">
           <div className="mx-auto max-w-4xl text-center">
             <h2 className="mb-4 text-2xl font-bold text-foreground sm:text-3xl">How ArcLend Works</h2>
-            <p className="mb-12 text-muted-foreground">Privacy-preserving DeFi in three steps</p>
+            <p className="mb-12 text-muted-foreground">DeFi lending made simple across multiple chains</p>
             <div className="grid gap-8 sm:grid-cols-3">
               {[
-                { step: "01", title: "Connect Wallet", desc: "Connect your Phantom or Solflare wallet to the Solana devnet." },
-                { step: "02", title: "Encrypt & Supply", desc: "Your collateral amounts are encrypted via Arcium's MPC before submission." },
-                { step: "03", title: "Private Positions", desc: "Health factors and liquidation thresholds remain hidden from all other parties." },
+                { step: "01", title: "Connect Wallet", desc: "Connect MetaMask, Coinbase Wallet, or any EVM wallet to get started." },
+                { step: "02", title: "Choose Network", desc: "Select Base Sepolia for ETH/WETH/USDT or Rialo Testnet for RIA/WETH/USDT." },
+                { step: "03", title: "Start Trading", desc: "Supply, borrow, swap tokens, or provide liquidity to earn rewards." },
               ].map((item, i) => (
                 <motion.div
                   key={i}

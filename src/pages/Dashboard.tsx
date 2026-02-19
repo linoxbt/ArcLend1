@@ -3,8 +3,7 @@ import { TrendingUp, TrendingDown, DollarSign, Percent, Wallet } from "lucide-re
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { HealthGauge } from "@/components/HealthGauge";
-import { PrivacyBadge } from "@/components/PrivacyBadge";
+import { NetworkBadge } from "@/components/NetworkBadge";
 import { useWalletState, WalletButton } from "@/components/WalletButton";
 import { useNavigate } from "react-router-dom";
 
@@ -19,7 +18,7 @@ export default function Dashboard() {
           <Wallet className="mb-4 h-12 w-12 text-muted-foreground" />
           <h2 className="mb-2 text-xl font-bold text-foreground">Connect Your Wallet</h2>
           <p className="mb-6 max-w-md text-sm text-muted-foreground">
-            Connect your Solana wallet to view your portfolio, positions, and health factors.
+            Connect your EVM wallet to view your portfolio, positions, and earnings.
           </p>
           <WalletButton />
         </div>
@@ -27,12 +26,11 @@ export default function Dashboard() {
     );
   }
 
-  // When connected but no on-chain program deployed yet, show placeholder state
   return (
     <DashboardLayout>
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-xl font-bold text-foreground sm:text-2xl">Portfolio Dashboard</h1>
-        <PrivacyBadge />
+        <NetworkBadge />
       </div>
 
       <div className="mb-6 grid gap-4 grid-cols-2 lg:grid-cols-4">
@@ -78,7 +76,7 @@ export default function Dashboard() {
           <CardHeader>
             <CardTitle className="flex items-center justify-between text-sm text-foreground">
               Health Factor
-              <PrivacyBadge compact />
+              <NetworkBadge compact />
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col items-center gap-4">
