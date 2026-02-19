@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { Bell, ShieldCheck, Wallet } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { PrivacyBadge } from "@/components/PrivacyBadge";
+import { NetworkBadge } from "@/components/NetworkBadge";
 import { useWalletState, WalletButton } from "@/components/WalletButton";
 
 export default function HealthMonitor() {
@@ -18,7 +17,7 @@ export default function HealthMonitor() {
           <Wallet className="mb-4 h-12 w-12 text-muted-foreground" />
           <h2 className="mb-2 text-xl font-bold text-foreground">Connect Your Wallet</h2>
           <p className="mb-6 max-w-md text-sm text-muted-foreground">
-            Connect your Solana wallet to monitor your health factors and liquidation risks.
+            Connect your wallet to monitor your health factors and liquidation risks.
           </p>
           <WalletButton />
         </div>
@@ -30,13 +29,13 @@ export default function HealthMonitor() {
     <DashboardLayout>
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-xl font-bold text-foreground sm:text-2xl">Health & Liquidation Monitor</h1>
-        <PrivacyBadge />
+        <NetworkBadge />
       </div>
 
       <Card className="mb-6 glow-purple border-primary/20 bg-primary/5">
         <CardContent className="flex items-center gap-3 p-4">
           <ShieldCheck className="h-5 w-5 shrink-0 text-primary" />
-          <p className="text-sm text-primary">Your health factor is computed in encrypted state — invisible to liquidation bots</p>
+          <p className="text-sm text-primary">Monitor your health factors across Base Sepolia and Rialo Testnet positions</p>
         </CardContent>
       </Card>
 

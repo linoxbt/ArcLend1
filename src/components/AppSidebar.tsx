@@ -1,14 +1,19 @@
-import { LayoutDashboard, Store, Layers, Activity, BookOpen, X } from "lucide-react";
+import { LayoutDashboard, Store, Layers, Activity, BookOpen, ArrowLeftRight, Droplets, Coins, Rocket, X } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import logo from "@/assets/logo.png";
 import { WalletButton } from "./WalletButton";
+import { ThemeToggle } from "./ThemeToggle";
 import { cn } from "@/lib/utils";
 
 const items = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Markets", url: "/markets", icon: Store },
+  { title: "Swap", url: "/swap", icon: ArrowLeftRight },
+  { title: "Liquidity", url: "/liquidity", icon: Droplets },
   { title: "Positions", url: "/positions", icon: Layers },
+  { title: "Faucet", url: "/faucet", icon: Coins },
   { title: "Health Monitor", url: "/health", icon: Activity },
+  { title: "Deploy", url: "/deploy", icon: Rocket },
   { title: "Docs", url: "/docs", icon: BookOpen },
 ];
 
@@ -20,12 +25,15 @@ export function AppSidebar({ onClose }: { onClose: () => void }) {
           <img src={logo} alt="ArcLend" className="h-8 w-8" />
           <span className="text-lg font-bold text-foreground">ArcLend</span>
         </div>
-        <button onClick={onClose} className="text-muted-foreground md:hidden">
-          <X className="h-5 w-5" />
-        </button>
+        <div className="flex items-center gap-1">
+          <ThemeToggle />
+          <button onClick={onClose} className="text-muted-foreground md:hidden">
+            <X className="h-5 w-5" />
+          </button>
+        </div>
       </div>
 
-      <nav className="flex-1 space-y-1 px-3">
+      <nav className="flex-1 space-y-1 overflow-y-auto px-3">
         {items.map((item) => (
           <NavLink
             key={item.title}

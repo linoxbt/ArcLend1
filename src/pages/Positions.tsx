@@ -1,9 +1,8 @@
-import { motion } from "framer-motion";
 import { Wallet } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { PrivacyBadge } from "@/components/PrivacyBadge";
+import { NetworkBadge } from "@/components/NetworkBadge";
 import { useWalletState, WalletButton } from "@/components/WalletButton";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -19,7 +18,7 @@ export default function Positions() {
           <Wallet className="mb-4 h-12 w-12 text-muted-foreground" />
           <h2 className="mb-2 text-xl font-bold text-foreground">Connect Your Wallet</h2>
           <p className="mb-6 max-w-md text-sm text-muted-foreground">
-            Connect your Solana wallet to view and manage your lending positions.
+            Connect your wallet to view and manage your lending positions.
           </p>
           <WalletButton />
         </div>
@@ -31,7 +30,7 @@ export default function Positions() {
     <DashboardLayout>
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-xl font-bold text-foreground sm:text-2xl">My Positions</h1>
-        <PrivacyBadge />
+        <NetworkBadge />
       </div>
 
       <Tabs defaultValue="supplies">

@@ -1,39 +1,35 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowUpDown, Wallet } from "lucide-react";
+import { Wallet } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { PrivacyBadge } from "@/components/PrivacyBadge";
-import { HealthGauge } from "@/components/HealthGauge";
-import { useWalletState, WalletButton } from "@/components/WalletButton";
+import { NetworkBadge } from "@/components/NetworkBadge";
+import { useWalletState } from "@/components/WalletButton";
 import { useToast } from "@/hooks/use-toast";
-
-interface Token {
-  symbol: string;
-  name: string;
-  icon: string;
-}
 
 interface Pool {
   id: string;
-  token: Token;
+  symbol: string;
+  name: string;
+  icon: string;
+  network: "base-sepolia" | "rialo";
   supplyAPY: number;
   borrowAPY: number;
   totalLiquidity: string;
   utilization: number;
 }
 
-// Pool configuration — these would be fetched from on-chain state when contracts are deployed
 const pools: Pool[] = [
-  { id: "1", token: { symbol: "SOL", name: "Solana", icon: "◎" }, supplyAPY: 0, borrowAPY: 0, totalLiquidity: "—", utilization: 0 },
-  { id: "2", token: { symbol: "USDC", name: "USD Coin", icon: "$" }, supplyAPY: 0, borrowAPY: 0, totalLiquidity: "—", utilization: 0 },
-  { id: "3", token: { symbol: "mSOL", name: "Marinade SOL", icon: "🌊" }, supplyAPY: 0, borrowAPY: 0, totalLiquidity: "—", utilization: 0 },
-  { id: "4", token: { symbol: "jitoSOL", name: "Jito SOL", icon: "⚡" }, supplyAPY: 0, borrowAPY: 0, totalLiquidity: "—", utilization: 0 },
-  { id: "5", token: { symbol: "BONK", name: "Bonk", icon: "🐕" }, supplyAPY: 0, borrowAPY: 0, totalLiquidity: "—", utilization: 0 },
-  { id: "6", token: { symbol: "RAY", name: "Raydium", icon: "☀" }, supplyAPY: 0, borrowAPY: 0, totalLiquidity: "—", utilization: 0 },
+  { id: "b-eth", symbol: "ETH", name: "Ether", icon: "Ξ", network: "base-sepolia", supplyAPY: 0, borrowAPY: 0, totalLiquidity: "—", utilization: 0 },
+  { id: "b-weth", symbol: "WETH", name: "Wrapped Ether", icon: "Ξ", network: "base-sepolia", supplyAPY: 0, borrowAPY: 0, totalLiquidity: "—", utilization: 0 },
+  { id: "b-usdt", symbol: "USDT", name: "Tether USD", icon: "₮", network: "base-sepolia", supplyAPY: 0, borrowAPY: 0, totalLiquidity: "—", utilization: 0 },
+  { id: "r-ria", symbol: "RIA", name: "Rialo", icon: "◆", network: "rialo", supplyAPY: 0, borrowAPY: 0, totalLiquidity: "—", utilization: 0 },
+  { id: "r-weth", symbol: "WETH", name: "Wrapped Ether", icon: "Ξ", network: "rialo", supplyAPY: 0, borrowAPY: 0, totalLiquidity: "—", utilization: 0 },
+  { id: "r-usdt", symbol: "USDT", name: "Tether USD", icon: "₮", network: "rialo", supplyAPY: 0, borrowAPY: 0, totalLiquidity: "—", utilization: 0 },
 ];
 
 export default function Markets() {
@@ -42,10 +38,13 @@ export default function Markets() {
   const [selectedPool, setSelectedPool] = useState<Pool | null>(null);
   const [modalType, setModalType] = useState<"supply" | "borrow">("supply");
   const [amount, setAmount] = useState("");
+  const [activeNetwork, setActiveNetwork] = useState("all");
+
+  const filteredPools = activeNetwork === "all" ? pools : pools.filter(p => p.network === activeNetwork);
 
   const openModal = (pool: Pool, type: "supply" | "borrow") => {
     if (!connected) {
-      toast({ title: "Connect wallet first", description: "Please connect your Solana wallet to supply or borrow.", variant: "destructive" });
+      toast({ title: "Connect wallet first", description: "Please connect your EVM wallet to supply or borrow.", variant: "destructive" });
       return;
     }
     setSelectedPool(pool);
@@ -55,8 +54,8 @@ export default function Markets() {
 
   const handleConfirm = () => {
     toast({
-      title: "Contract Not Deployed",
-      description: "Deploy the ArcLend smart contracts to enable this action. See the Docs page for instructions.",
+      title: "Contracts Not Deployed",
+      description: "Deploy the ArcLend smart contracts first. See the Deploy page for instructions.",
     });
     setSelectedPool(null);
   };
@@ -65,23 +64,33 @@ export default function Markets() {
     <DashboardLayout>
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-xl font-bold text-foreground sm:text-2xl">Lending Markets</h1>
-        <PrivacyBadge />
+        <NetworkBadge />
       </div>
 
+      <Tabs value={activeNetwork} onValueChange={setActiveNetwork} className="mb-6">
+        <TabsList className="bg-secondary">
+          <TabsTrigger value="all">All Networks</TabsTrigger>
+          <TabsTrigger value="base-sepolia">Base Sepolia</TabsTrigger>
+          <TabsTrigger value="rialo">Rialo</TabsTrigger>
+        </TabsList>
+      </Tabs>
+
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {pools.map((pool, i) => (
+        {filteredPools.map((pool, i) => (
           <motion.div key={pool.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
             <Card className="glow-purple border-border bg-card transition-all hover:border-primary/30">
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-2xl">{pool.token.icon}</span>
+                    <span className="text-2xl">{pool.icon}</span>
                     <div>
-                      <p className="text-base font-bold text-foreground">{pool.token.symbol}</p>
-                      <p className="text-xs text-muted-foreground">{pool.token.name}</p>
+                      <p className="text-base font-bold text-foreground">{pool.symbol}</p>
+                      <p className="text-xs text-muted-foreground">{pool.name}</p>
                     </div>
                   </div>
-                  <PrivacyBadge compact />
+                  <span className="rounded-full border border-border bg-secondary px-2 py-0.5 text-[10px] text-muted-foreground">
+                    {pool.network === "base-sepolia" ? "Base" : "Rialo"}
+                  </span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -122,11 +131,11 @@ export default function Markets() {
         <DialogContent className="border-border bg-card">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-foreground">
-              <span className="text-2xl">{selectedPool?.token.icon}</span>
-              {modalType === "supply" ? "Supply" : "Borrow"} {selectedPool?.token.symbol}
+              <span className="text-2xl">{selectedPool?.icon}</span>
+              {modalType === "supply" ? "Supply" : "Borrow"} {selectedPool?.symbol}
             </DialogTitle>
             <DialogDescription className="text-muted-foreground">
-              {modalType === "supply" ? "Supply assets to the lending pool" : "Borrow assets from the pool"}
+              {modalType === "supply" ? "Supply assets to the lending pool" : "Borrow assets from the pool"} on {selectedPool?.network === "base-sepolia" ? "Base Sepolia" : "Rialo Testnet"}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-2">
@@ -139,7 +148,6 @@ export default function Markets() {
                 <span>Health Factor Impact</span>
                 <span className="text-foreground">—</span>
               </div>
-              <PrivacyBadge />
             </div>
             <Button className="w-full glow-purple" disabled={!amount} onClick={handleConfirm}>
               {modalType === "supply" ? "Confirm Supply" : "Confirm Borrow"}
