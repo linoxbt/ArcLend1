@@ -8,18 +8,13 @@ import { useWalletState, WalletButton } from "@/components/WalletButton";
 import { useNavigate } from "react-router-dom";
 import { useBalance, useAccount } from "wagmi";
 import { baseSepolia } from "wagmi/chains";
-
-const tokenPrices: Record<string, number> = {
-  ETH: 2253.74,
-  WETH: 2253.74,
-  USDT: 0.99,
-  RIA: 12.40,
-};
+import { useTokenPrices } from "@/hooks/use-token-prices";
 
 export default function Dashboard() {
   const { connected } = useWalletState();
   const { address } = useAccount();
   const navigate = useNavigate();
+  const { prices: tokenPrices } = useTokenPrices();
 
   const { data: ethBalance } = useBalance({
     address,
@@ -90,7 +85,7 @@ export default function Dashboard() {
                   <span className="text-lg">{symbol === "ETH" || symbol === "WETH" ? "⟠" : symbol === "USDT" ? "💵" : "💎"}</span>
                   <span className="text-sm font-medium text-foreground">{symbol}</span>
                 </div>
-                <span className="text-sm font-bold text-foreground">${price.toFixed(2)}</span>
+                <span className="text-sm font-bold text-foreground">${(price as number).toFixed(2)}</span>
               </div>
             ))}
           </div>

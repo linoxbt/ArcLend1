@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { useWalletState, WalletButton } from "@/components/WalletButton";
 import { useToast } from "@/hooks/use-toast";
+import { useTokenPrices } from "@/hooks/use-token-prices";
 
 const baseTokens = [
   { symbol: "ETH", name: "Ether", icon: "⟠" },
@@ -22,16 +23,10 @@ const rialoTokens = [
   { symbol: "USDT", name: "Tether USD", icon: "💵" },
 ];
 
-const tokenPrices: Record<string, number> = {
-  ETH: 2253.74,
-  WETH: 2253.74,
-  USDT: 0.99,
-  RIA: 12.40,
-};
-
 export default function Swap() {
   const { connected } = useWalletState();
   const { toast } = useToast();
+  const { prices: tokenPrices, refresh: refreshPrices } = useTokenPrices();
   const [network, setNetwork] = useState<"base-sepolia" | "rialo">("base-sepolia");
   const [fromToken, setFromToken] = useState("ETH");
   const [toToken, setToToken] = useState("USDT");
@@ -56,7 +51,8 @@ export default function Swap() {
 
   const handleRefresh = async () => {
     setRefreshing(true);
-    await new Promise(r => setTimeout(r, 800));
+    await refreshPrices();
+    await new Promise(r => setTimeout(r, 400));
     setRefreshing(false);
   };
 
