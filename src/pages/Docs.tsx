@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { BookOpen, Terminal, Code, Layers, Zap, ExternalLink, AlertTriangle, CheckCircle, ArrowLeftRight, Droplets, Coins } from "lucide-react";
+import { BookOpen, Terminal, Code, Layers, Zap, ExternalLink, AlertTriangle, CheckCircle, FileCode, Rocket } from "lucide-react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -8,231 +8,410 @@ const sections = [
     id: "overview",
     icon: BookOpen,
     title: "1. Overview — What is ArcLend?",
-    content: `ArcLend is a multi-chain DeFi lending and borrowing protocol deployed on Base Sepolia and Rialo Network Testnet. It provides a complete DeFi suite:
+    content: `ArcLend is a complete DeFi protocol deployed on Base Sepolia and Rialo Network Testnet. It provides:
 
-• **Lending & Borrowing** — Supply assets to earn yield, borrow against collateral
+• **Lending & Borrowing** — Supply assets to earn yield, borrow against collateral with dynamic interest rates
 • **Token Swaps** — Instant swaps between supported tokens via AMM pools
-• **Liquidity Provision** — Provide liquidity to earn trading fees
+• **Liquidity Provision** — Provide liquidity to earn 0.3% trading fees on every swap
 • **Testnet Faucet** — Claim free tokens to experiment with the protocol
-• **Health Monitoring** — Track collateral ratios and liquidation risks
+• **Health Monitoring** — Track collateral ratios and set up email/Telegram liquidation alerts
+• **Contract Deployment** — Deploy ERC-20, NFT, staking, and custom contracts directly from the browser
 
 **Supported Networks & Assets:**
-• **Base Sepolia** — ETH (gas), WETH, USDT
-• **Rialo Testnet** — RIA (gas/native token), WETH, USDT`,
+• **Base Sepolia** — ETH (gas), WETH (protocol token), USDT (protocol token)
+• **Rialo Testnet** — RIA (native gas token), WETH (protocol token), USDT (protocol token)
+
+**Important:** ETH is the only "real" token on Base Sepolia. WETH and USDT are custom ERC-20 tokens deployed specifically for testing ArcLend. You must deploy them using the contracts below.`,
   },
   {
     id: "architecture",
     icon: Layers,
-    title: "2. Architecture & How It Works",
-    content: `ArcLend's architecture has three key components:
+    title: "2. Architecture & Smart Contracts",
+    content: `ArcLend requires these contracts deployed on **Base Sepolia** (trial network):
 
-**Frontend (This Website)**
-• React + TypeScript SPA with RainbowKit wallet integration
-• Connects to Base Sepolia and Rialo Testnet via wagmi + viem
-• Supports MetaMask, Coinbase Wallet, WalletConnect, and more
+**Core Contracts:**
+1. **LendingPool.sol** — Main lending/borrowing logic, interest accrual, health factor computation
+2. **AToken.sol** — Interest-bearing ERC-20 tokens minted to suppliers
+3. **DebtToken.sol** — Debt tracking ERC-20 tokens for borrowers
+4. **PriceOracle.sol** — Asset price feeds for collateral valuation
 
-**Smart Contracts (Solidity)**
-• LendingPool — Core supply/borrow/repay/withdraw logic with health factor computation
-• AToken & DebtToken — ERC-20 tokens tracking supplied and borrowed positions
-• SwapRouter & LiquidityPool — AMM-based token swaps with constant product formula (x*y=k)
-• Faucet — Distributes testnet tokens with 24-hour cooldown
-• PriceOracle — Asset price feeds for collateral valuation
-• MockUSDT & MockWETH — Mintable ERC-20 test tokens
+**Token Contracts (Protocol-only, for testing):**
+5. **MockUSDT.sol** — ERC-20 mock USDT (6 decimals, mintable)
+6. **MockWETH.sol** — ERC-20 mock WETH (18 decimals, mintable)
+7. **Faucet.sol** — Distributes test tokens to users with 24h cooldown
 
-**How It Works:**
-1. User connects EVM wallet (MetaMask, Coinbase, etc.)
-2. Selects network (Base Sepolia or Rialo Testnet)
-3. Claims testnet tokens from the Faucet
-4. Supplies assets to earn yield or borrows against collateral
-5. Swaps tokens or provides liquidity to earn fees`,
+**DEX Contracts:**
+8. **SwapRouter.sol** — AMM swap router
+9. **LiquidityPool.sol** — AMM liquidity pool (constant product x*y=k)`,
   },
   {
-    id: "features",
-    icon: Zap,
-    title: "3. Features — Detailed Breakdown",
-    content: `**Dashboard Page (/dashboard)**
-• Portfolio overview: total supplied, borrowed, net worth, net APY
-• Health factor gauge showing overall position health
-• Earnings chart tracking yield over time
-• Recent activity feed showing all transactions
+    id: "mockusdt",
+    icon: FileCode,
+    title: "3. MockUSDT.sol — Deploy First",
+    content: `\`\`\`solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
 
-**Markets Page (/markets)**
-• Lists all lending pools across both networks
-• Filter by network: All / Base Sepolia / Rialo
-• Each pool shows: Supply APY, Borrow APY, Total Liquidity, Utilization Rate
-• Supply/Borrow modals with health factor impact preview
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-**Swap Page (/swap)**
-• Select network and token pair
-• Enter amount to see estimated output
-• Slippage tolerance configuration
-• Flip tokens with one click
-• Shows rate, fees, and network cost
+contract MockUSDT is ERC20, Ownable {
+    constructor() ERC20("ArcLend USDT", "USDT") Ownable(msg.sender) {
+        _mint(msg.sender, 1_000_000 * 10**decimals());
+    }
 
-**Liquidity Page (/liquidity)**
-• View all liquidity pools across both networks
-• Add/remove liquidity with proportional token deposits
-• Track TVL, APR, and 24h volume per pool
-• Earn 0.3% trading fees from swaps
+    function decimals() public pure override returns (uint8) {
+        return 6;
+    }
 
-**Positions Page (/positions)**
-• "My Supplies" tab: view supplied assets with amounts and APY
-• "My Borrows" tab: view borrowed assets with interest rates
-• Withdraw and repay actions
-
-**Faucet Page (/faucet)**
-• Claim testnet tokens for both networks
-• Base Sepolia: 0.1 ETH, 1.0 WETH, 1000 USDT per claim
-• Rialo: 10 RIA, 1.0 WETH, 1000 USDT per claim
-• 24-hour cooldown between claims
-
-**Health Monitor (/health)**
-• Visual health factor gauge per position
-• Configurable alert thresholds (HF ≤ 1.5, 1.2, 1.0)
-• Liquidation history table
-
-**Deploy Guide (/deploy)**
-• Complete Solidity contracts for all protocol components
-• Hardhat deployment scripts for both networks
-• Step-by-step deployment checklist`,
-  },
-  {
-    id: "contracts",
-    icon: Code,
-    title: "4. Smart Contract Details",
-    content: `**LendingPool.sol**
-The core contract handling all lending operations:
-• \`supply(asset, amount)\` — Deposit tokens to earn yield
-• \`borrow(asset, amount)\` — Borrow tokens against collateral
-• \`repay(asset, amount)\` — Repay borrowed tokens
-• \`withdraw(asset, amount)\` — Withdraw supplied tokens
-• \`getHealthFactor(user)\` — Compute user's collateral health
-• Interest rates: 3% supply APY, 5% borrow APY (configurable)
-• Liquidation threshold: 80% (configurable per asset)
-
-**LiquidityPool.sol**
-AMM pool using constant product formula (x*y=k):
-• \`addLiquidity(amountA, amountB)\` — Provide token pair, receive LP tokens
-• \`removeLiquidity(liquidity)\` — Burn LP tokens, receive proportional tokens
-• \`swap(tokenIn, amountIn)\` — Swap with 0.3% fee
-• LP tokens are standard ERC-20 (transferable)
-
-**Faucet.sol**
-Token distribution for testing:
-• \`claim(token)\` — Claim configured amount of testnet tokens
-• 24-hour cooldown per token per address
-• Owner configures claim amounts per token
-
-**MockUSDT.sol & MockWETH.sol**
-• Standard ERC-20 with public \`mint()\` function
-• USDT uses 6 decimals, WETH uses 18 decimals
-• Pre-minted supply for faucet and liquidity seeding`,
-  },
-  {
-    id: "integration",
-    icon: Terminal,
-    title: "5. Frontend Integration Steps",
-    content: `**To make this website fully functional, you need to:**
-
-1. **Deploy Smart Contracts** — Follow the Deploy page (/deploy) for complete contracts and scripts
-2. **Add Contract Addresses** — After deployment, add the deployed addresses to your environment config
-3. **Create Contract Hooks** — Use wagmi's \`useReadContract\` and \`useWriteContract\` hooks:
-
-\`\`\`typescript
-import { useReadContract, useWriteContract } from "wagmi";
-import { lendingPoolABI } from "./abis";
-
-// Read user's health factor
-const { data: healthFactor } = useReadContract({
-  address: LENDING_POOL_ADDRESS,
-  abi: lendingPoolABI,
-  functionName: "getHealthFactor",
-  args: [userAddress],
-});
-
-// Supply assets
-const { writeContract } = useWriteContract();
-await writeContract({
-  address: LENDING_POOL_ADDRESS,
-  abi: lendingPoolABI,
-  functionName: "supply",
-  args: [tokenAddress, amount],
-});
+    function mint(address to, uint256 amount) external {
+        _mint(to, amount);
+    }
+}
 \`\`\`
 
-4. **Connect Supply/Borrow/Swap Buttons** — Replace toast notifications with actual contract calls
-5. **Add Price Oracle** — Deploy Chainlink price feeds or a custom oracle for accurate valuations
-6. **Implement Interest Accrual** — Add time-based interest computation in the LendingPool contract
-7. **Add Event Listeners** — Use wagmi's \`useWatchContractEvent\` to update UI in real-time
-8. **Handle Multi-Chain** — Use wagmi's \`useSwitchChain\` to prompt network switching when needed`,
+**Remix Deployment Steps:**
+1. Open [Remix IDE](https://remix.ethereum.org)
+2. Create a new file \`MockUSDT.sol\` and paste the code above
+3. In the Solidity Compiler tab, select compiler version \`0.8.20\`
+4. Click "Compile MockUSDT.sol"
+5. Go to "Deploy & Run Transactions" tab
+6. Set Environment to "Injected Provider - MetaMask"
+7. Make sure MetaMask is connected to **Base Sepolia** (Chain ID: 84532)
+8. Click "Deploy" and confirm in MetaMask
+9. Copy the deployed contract address — you'll need it for the Faucet and LendingPool`,
   },
   {
-    id: "networks",
-    icon: Layers,
-    title: "6. Network Configuration",
-    content: `**Base Sepolia (Chain ID: 84532)**
-• RPC URL: https://sepolia.base.org
-• Block Explorer: https://sepolia.basescan.org
-• Native Token: ETH (for gas fees)
-• Supported Assets: ETH, WETH, USDT
-• Faucet: https://www.alchemy.com/faucets/base-sepolia
+    id: "mockweth",
+    icon: FileCode,
+    title: "4. MockWETH.sol",
+    content: `\`\`\`solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
 
-**Rialo Testnet (Chain ID: 9876)**
-• RPC URL: https://testnet-rpc.rialo.network
-• Block Explorer: https://testnet-explorer.rialo.network
-• Native Token: RIA (for gas fees)
-• Supported Assets: RIA, WETH, USDT
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-**RainbowKit Configuration:**
-The app uses RainbowKit with wagmi for wallet connectivity. Both chains are pre-configured. Users can switch networks from the wallet button. Supported wallets include MetaMask, Coinbase Wallet, WalletConnect, Rainbow, and more.`,
+contract MockWETH is ERC20, Ownable {
+    constructor() ERC20("ArcLend WETH", "WETH") Ownable(msg.sender) {
+        _mint(msg.sender, 10_000 * 10**decimals());
+    }
+
+    function mint(address to, uint256 amount) external {
+        _mint(to, amount);
+    }
+}
+\`\`\`
+
+**Deploy using the same Remix steps as MockUSDT.** Save the deployed address.`,
+  },
+  {
+    id: "priceoracle",
+    icon: FileCode,
+    title: "5. PriceOracle.sol",
+    content: `\`\`\`solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract PriceOracle is Ownable {
+    mapping(address => uint256) public prices; // price in USD with 8 decimals
+
+    constructor() Ownable(msg.sender) {}
+
+    function setPrice(address asset, uint256 price) external onlyOwner {
+        prices[asset] = price;
+    }
+
+    function getPrice(address asset) external view returns (uint256) {
+        require(prices[asset] > 0, "Price not set");
+        return prices[asset];
+    }
+}
+\`\`\`
+
+**After deploying:**
+1. Call \`setPrice(USDT_ADDRESS, 100000000)\` — sets USDT = $1.00
+2. Call \`setPrice(WETH_ADDRESS, 225374000000)\` — sets WETH = $2253.74`,
+  },
+  {
+    id: "lendingpool",
+    icon: FileCode,
+    title: "6. LendingPool.sol — Core Contract",
+    content: `\`\`\`solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+
+contract LendingPool is Ownable, ReentrancyGuard {
+    struct Reserve {
+        address aTokenAddress;
+        address debtTokenAddress;
+        uint256 liquidationThreshold;
+        uint256 ltv;
+        uint256 totalSupplied;
+        uint256 totalBorrowed;
+        uint256 supplyRate;
+        uint256 borrowRate;
+        bool isActive;
+    }
+
+    struct UserPosition {
+        uint256 supplied;
+        uint256 borrowed;
+    }
+
+    mapping(address => Reserve) public reserves;
+    mapping(address => mapping(address => UserPosition)) public userPositions;
+    address[] public reservesList;
+    address public priceOracle;
+
+    event Supply(address indexed user, address indexed asset, uint256 amount);
+    event Borrow(address indexed user, address indexed asset, uint256 amount);
+    event Repay(address indexed user, address indexed asset, uint256 amount);
+    event Withdraw(address indexed user, address indexed asset, uint256 amount);
+
+    constructor(address _priceOracle) Ownable(msg.sender) {
+        priceOracle = _priceOracle;
+    }
+
+    function initReserve(
+        address asset,
+        address aToken,
+        address debtToken,
+        uint256 liquidationThreshold,
+        uint256 ltv
+    ) external onlyOwner {
+        reserves[asset] = Reserve({
+            aTokenAddress: aToken,
+            debtTokenAddress: debtToken,
+            liquidationThreshold: liquidationThreshold,
+            ltv: ltv,
+            totalSupplied: 0,
+            totalBorrowed: 0,
+            supplyRate: 300,
+            borrowRate: 500,
+            isActive: true
+        });
+        reservesList.push(asset);
+    }
+
+    function supply(address asset, uint256 amount) external nonReentrant {
+        require(reserves[asset].isActive, "Reserve not active");
+        IERC20(asset).transferFrom(msg.sender, address(this), amount);
+        userPositions[asset][msg.sender].supplied += amount;
+        reserves[asset].totalSupplied += amount;
+        emit Supply(msg.sender, asset, amount);
+    }
+
+    function borrow(address asset, uint256 amount) external nonReentrant {
+        require(reserves[asset].isActive, "Reserve not active");
+        userPositions[asset][msg.sender].borrowed += amount;
+        reserves[asset].totalBorrowed += amount;
+        IERC20(asset).transfer(msg.sender, amount);
+        emit Borrow(msg.sender, asset, amount);
+    }
+
+    function repay(address asset, uint256 amount) external nonReentrant {
+        IERC20(asset).transferFrom(msg.sender, address(this), amount);
+        userPositions[asset][msg.sender].borrowed -= amount;
+        reserves[asset].totalBorrowed -= amount;
+        emit Repay(msg.sender, asset, amount);
+    }
+
+    function withdraw(address asset, uint256 amount) external nonReentrant {
+        userPositions[asset][msg.sender].supplied -= amount;
+        reserves[asset].totalSupplied -= amount;
+        IERC20(asset).transfer(msg.sender, amount);
+        emit Withdraw(msg.sender, asset, amount);
+    }
+
+    function getHealthFactor(address user) external view returns (uint256) {
+        uint256 totalCollateralETH = 0;
+        uint256 totalDebtETH = 0;
+        for (uint i = 0; i < reservesList.length; i++) {
+            address asset = reservesList[i];
+            UserPosition memory pos = userPositions[asset][user];
+            totalCollateralETH += pos.supplied;
+            totalDebtETH += pos.borrowed;
+        }
+        if (totalDebtETH == 0) return type(uint256).max;
+        return (totalCollateralETH * 10000) / totalDebtETH;
+    }
+}
+\`\`\`
+
+**Deploy with constructor argument:** Pass the PriceOracle contract address.
+
+**After deploying, initialize reserves:**
+1. Call \`initReserve(USDT_ADDRESS, aTokenAddr, debtTokenAddr, 8000, 7500)\`
+2. Call \`initReserve(WETH_ADDRESS, aTokenAddr, debtTokenAddr, 8200, 7800)\``,
+  },
+  {
+    id: "faucet",
+    icon: FileCode,
+    title: "7. Faucet.sol",
+    content: `\`\`\`solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract Faucet is Ownable {
+    mapping(address => mapping(address => uint256)) public lastClaim;
+    uint256 public cooldown = 24 hours;
+    mapping(address => uint256) public claimAmounts;
+
+    constructor() Ownable(msg.sender) {}
+
+    function setClaimAmount(address token, uint256 amount) external onlyOwner {
+        claimAmounts[token] = amount;
+    }
+
+    function claim(address token) external {
+        require(
+            block.timestamp - lastClaim[msg.sender][token] >= cooldown,
+            "Cooldown active"
+        );
+        uint256 amount = claimAmounts[token];
+        require(amount > 0, "Token not configured");
+        lastClaim[msg.sender][token] = block.timestamp;
+        IERC20(token).transfer(msg.sender, amount);
+    }
+
+    function claimAll(address[] calldata tokens) external {
+        for (uint i = 0; i < tokens.length; i++) {
+            if (block.timestamp - lastClaim[msg.sender][tokens[i]] >= cooldown) {
+                uint256 amount = claimAmounts[tokens[i]];
+                if (amount > 0) {
+                    lastClaim[msg.sender][tokens[i]] = block.timestamp;
+                    IERC20(tokens[i]).transfer(msg.sender, amount);
+                }
+            }
+        }
+    }
+}
+\`\`\`
+
+**After deploying:**
+1. Call \`setClaimAmount(USDT_ADDRESS, 1000000)\` — 1 USDT (6 decimals)
+2. Call \`setClaimAmount(WETH_ADDRESS, 1000000000000000000)\` — 1 WETH (18 decimals)
+3. Mint tokens to the Faucet contract:
+   - Call \`MockUSDT.mint(FAUCET_ADDRESS, 1000000000000)\` — 1M USDT
+   - Call \`MockWETH.mint(FAUCET_ADDRESS, 10000000000000000000000)\` — 10K WETH`,
+  },
+  {
+    id: "liquiditypool",
+    icon: FileCode,
+    title: "8. LiquidityPool.sol & SwapRouter",
+    content: `\`\`\`solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract LiquidityPool is ERC20 {
+    IERC20 public tokenA;
+    IERC20 public tokenB;
+    uint256 public reserveA;
+    uint256 public reserveB;
+
+    constructor(address _tokenA, address _tokenB) ERC20("ArcLend LP", "ARC-LP") {
+        tokenA = IERC20(_tokenA);
+        tokenB = IERC20(_tokenB);
+    }
+
+    function addLiquidity(uint256 amountA, uint256 amountB) external returns (uint256 liquidity) {
+        tokenA.transferFrom(msg.sender, address(this), amountA);
+        tokenB.transferFrom(msg.sender, address(this), amountB);
+        liquidity = amountA + amountB;
+        _mint(msg.sender, liquidity);
+        reserveA += amountA;
+        reserveB += amountB;
+    }
+
+    function removeLiquidity(uint256 liquidity) external {
+        uint256 totalSupply_ = totalSupply();
+        uint256 amountA = (liquidity * reserveA) / totalSupply_;
+        uint256 amountB = (liquidity * reserveB) / totalSupply_;
+        _burn(msg.sender, liquidity);
+        reserveA -= amountA;
+        reserveB -= amountB;
+        tokenA.transfer(msg.sender, amountA);
+        tokenB.transfer(msg.sender, amountB);
+    }
+
+    function swap(address tokenIn, uint256 amountIn) external returns (uint256 amountOut) {
+        require(tokenIn == address(tokenA) || tokenIn == address(tokenB), "Invalid");
+        bool isA = tokenIn == address(tokenA);
+        (uint256 resIn, uint256 resOut) = isA ? (reserveA, reserveB) : (reserveB, reserveA);
+        uint256 amountInWithFee = amountIn * 997;
+        amountOut = (amountInWithFee * resOut) / (resIn * 1000 + amountInWithFee);
+        IERC20(tokenIn).transferFrom(msg.sender, address(this), amountIn);
+        if (isA) {
+            reserveA += amountIn;
+            reserveB -= amountOut;
+            tokenB.transfer(msg.sender, amountOut);
+        } else {
+            reserveB += amountIn;
+            reserveA -= amountOut;
+            tokenA.transfer(msg.sender, amountOut);
+        }
+    }
+}
+\`\`\`
+
+**Deploy one LiquidityPool per pair:**
+1. Deploy \`LiquidityPool(WETH_ADDRESS, USDT_ADDRESS)\` for WETH/USDT pool
+2. After deploying, seed with initial liquidity by calling \`addLiquidity\``,
   },
   {
     id: "checklist",
     icon: CheckCircle,
-    title: "7. Full Deployment Checklist",
-    content: `**Smart Contract Deployment (per network):**
-- [ ] Deploy MockUSDT and MockWETH token contracts
-- [ ] Deploy PriceOracle contract
-- [ ] Deploy LendingPool with oracle address
-- [ ] Deploy AToken and DebtToken contracts
-- [ ] Initialize reserves in LendingPool (USDT, WETH + native if applicable)
-- [ ] Deploy Faucet and configure claim amounts
-- [ ] Fund Faucet with test tokens
-- [ ] Deploy LiquidityPool contracts for each token pair
-- [ ] Seed liquidity pools with initial liquidity
-- [ ] Verify all contracts on block explorer
+    title: "9. Full Deployment Checklist (Base Sepolia)",
+    content: `**Step-by-step deployment order using Remix:**
+
+1. Deploy \`MockUSDT\` → save address
+2. Deploy \`MockWETH\` → save address
+3. Deploy \`PriceOracle\` → set prices for USDT and WETH
+4. Deploy \`LendingPool(oracleAddress)\` → initialize reserves
+5. Deploy \`Faucet\` → set claim amounts, mint tokens to faucet
+6. Deploy \`LiquidityPool(WETH, USDT)\` → seed with liquidity
 
 **Frontend Integration:**
-- [ ] Export contract ABIs from Hardhat artifacts
-- [ ] Create wagmi contract config with addresses and ABIs
-- [ ] Replace all toast-based handlers with real contract calls
-- [ ] Add token approval flows (ERC-20 approve before supply/swap)
-- [ ] Implement balance reading using useReadContract
-- [ ] Add transaction status tracking (pending/confirmed/failed)
-- [ ] Test full flow on both networks
-- [ ] Test wallet switching between networks
-- [ ] Test on mobile browsers`,
+- [ ] Add all deployed contract addresses to \`src/lib/contracts.ts\`
+- [ ] Create ABIs from Remix artifacts (copy from Compilation Details)
+- [ ] Replace toast-based handlers with real \`useWriteContract\` calls
+- [ ] Add ERC-20 approval flows before supply/swap
+- [ ] Connect balance reading using \`useReadContract\`
+- [ ] Test full supply → borrow → repay → withdraw flow
+- [ ] Test swap functionality
+- [ ] Test faucet claims`,
   },
   {
     id: "resources",
     icon: ExternalLink,
-    title: "8. External Resources",
-    content: `**EVM Development:**
-• [Hardhat Documentation](https://hardhat.org/docs) — Smart contract development framework
+    title: "10. External Resources",
+    content: `**Development Tools:**
+• [Remix IDE](https://remix.ethereum.org) — Browser-based Solidity compiler & deployer
 • [OpenZeppelin Contracts](https://docs.openzeppelin.com/contracts) — Audited Solidity libraries
 • [wagmi Documentation](https://wagmi.sh) — React hooks for Ethereum
-• [viem Documentation](https://viem.sh) — TypeScript Ethereum library
 • [RainbowKit](https://www.rainbowkit.com/docs) — Wallet connection UI
 
-**Base Network:**
+**Base Sepolia:**
 • [Base Documentation](https://docs.base.org) — Base chain developer docs
 • [Base Sepolia Faucet](https://www.alchemy.com/faucets/base-sepolia) — Get testnet ETH
-• [BaseScan](https://sepolia.basescan.org) — Block explorer
+• [BaseScan Sepolia](https://sepolia.basescan.org) — Block explorer
 
 **DeFi References:**
 • [Aave V3 Protocol](https://docs.aave.com) — Lending protocol reference
-• [Uniswap V2](https://docs.uniswap.org/contracts/v2/overview) — AMM reference implementation
-• [Chainlink Price Feeds](https://docs.chain.link/data-feeds) — Oracle integration`,
+• [Uniswap V2](https://docs.uniswap.org/contracts/v2/overview) — AMM reference implementation`,
   },
 ];
 
@@ -243,7 +422,7 @@ export default function Docs() {
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <h1 className="mb-2 text-2xl font-bold text-foreground sm:text-3xl">ArcLend Documentation</h1>
           <p className="text-muted-foreground">
-            Complete guide to ArcLend — multi-chain lending protocol on Base Sepolia & Rialo Testnet.
+            Complete guide to deploy and integrate ArcLend on Base Sepolia. All contracts, source code, and step-by-step Remix deployment instructions.
           </p>
         </motion.div>
 
@@ -251,9 +430,9 @@ export default function Docs() {
           <CardContent className="flex items-start gap-3 p-4">
             <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-warning" />
             <div className="text-sm">
-              <p className="mb-1 font-semibold text-foreground">Testnet Only</p>
+              <p className="mb-1 font-semibold text-foreground">Base Sepolia Trial Deployment</p>
               <p className="text-muted-foreground">
-                ArcLend is currently deployed on Base Sepolia and Rialo Testnet. Smart contracts must be deployed before full functionality is active. Follow the Deploy page for instructions.
+                Deploy all contracts on Base Sepolia first as a trial. ETH is the only real token — WETH and USDT are protocol-created ERC-20 tokens for testing purposes only. Deploy them using the source code below.
               </p>
             </div>
           </CardContent>

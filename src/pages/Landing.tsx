@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Layers, ArrowLeftRight, Droplets, Coins, TrendingUp, Shield } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { ArrowRight, Layers, ArrowLeftRight, Droplets, Coins, Shield, Zap, BarChart3 } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { WalletButton } from "@/components/WalletButton";
 import { useWalletState } from "@/components/WalletButton";
@@ -10,31 +10,35 @@ import logo from "@/assets/logo.png";
 
 const features = [
   {
-    icon: TrendingUp,
+    icon: BarChart3,
     title: "Lending & Borrowing",
-    desc: "Supply assets to earn yield or borrow against your collateral across Base Sepolia and Rialo networks.",
+    desc: "Supply assets to earn competitive yields or leverage your portfolio by borrowing against your collateral with dynamic interest rates.",
   },
   {
     icon: ArrowLeftRight,
     title: "Token Swap",
-    desc: "Swap between supported tokens instantly with minimal slippage on both networks.",
+    desc: "Swap between supported tokens instantly with minimal slippage powered by our AMM liquidity pools.",
   },
   {
     icon: Droplets,
     title: "Liquidity Pools",
-    desc: "Provide liquidity to earn trading fees and protocol rewards on your favorite pairs.",
+    desc: "Provide liquidity to earn 0.3% trading fees on every swap. Track your positions, TVL, and APR in real-time.",
   },
   {
     icon: Coins,
     title: "Testnet Faucet",
-    desc: "Get free testnet tokens (USDT, WETH) on Base Sepolia and Rialo to start experimenting.",
+    desc: "Get free testnet tokens to start exploring the protocol. Claim USDT, WETH, and more with a single click.",
   },
-];
-
-const stats = [
-  { label: "Networks", value: "2 Testnets" },
-  { label: "Base Sepolia", value: "ETH • WETH • USDT" },
-  { label: "Rialo Testnet", value: "RIA • WETH • USDT" },
+  {
+    icon: Shield,
+    title: "Health Monitoring",
+    desc: "Track your collateral health factor in real-time. Set up email and Telegram alerts to stay ahead of liquidation risks.",
+  },
+  {
+    icon: Zap,
+    title: "Contract Deployment",
+    desc: "Deploy ERC-20 tokens, NFTs, staking contracts, and more directly from the browser. No CLI needed.",
+  },
 ];
 
 export default function Landing() {
@@ -45,10 +49,10 @@ export default function Landing() {
     <div className="flex min-h-screen flex-col bg-background">
       <nav className="border-b border-border/50 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
-          <div className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-3">
             <img src={logo} alt="ArcLend" className="h-8 w-8" />
             <span className="text-lg font-bold text-foreground">ArcLend</span>
-          </div>
+          </Link>
           <div className="hidden items-center gap-6 md:flex">
             <button onClick={() => navigate("/markets")} className="text-sm text-muted-foreground hover:text-foreground">Markets</button>
             <button onClick={() => navigate("/swap")} className="text-sm text-muted-foreground hover:text-foreground">Swap</button>
@@ -75,13 +79,13 @@ export default function Landing() {
             </div>
 
             <h1 className="mb-6 text-4xl font-bold leading-tight tracking-tight text-foreground sm:text-6xl lg:text-7xl">
-              Multi-Chain DeFi
+              Your Complete
               <br />
-              <span className="text-gradient-purple">Lending Protocol</span>
+              <span className="text-gradient-purple">DeFi Protocol</span>
             </h1>
 
             <p className="mx-auto mb-10 max-w-2xl text-base text-muted-foreground sm:text-lg">
-              Lend, borrow, swap, and provide liquidity across Base Sepolia and Rialo testnets. The complete DeFi experience with full EVM compatibility.
+              ArcLend is a full-featured decentralized finance protocol built for EVM chains. Supply and borrow assets with dynamic interest rates, swap tokens through AMM-powered liquidity pools, deploy smart contracts, and monitor your portfolio health — all from one seamless interface across Base Sepolia and Rialo testnets.
             </p>
 
             <div className="mb-16 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
@@ -108,24 +112,10 @@ export default function Landing() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
-            className="mx-auto mb-16 flex flex-wrap justify-center gap-6 sm:gap-12"
-          >
-            {stats.map((s, i) => (
-              <div key={i} className="text-center">
-                <p className="text-xs uppercase tracking-wider text-muted-foreground">{s.label}</p>
-                <p className="mt-1 text-lg font-bold text-foreground">{s.value}</p>
-              </div>
-            ))}
-          </motion.div>
-
-          <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="mx-auto grid w-full max-w-5xl gap-4 px-4 sm:grid-cols-2 lg:grid-cols-4"
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="mx-auto grid w-full max-w-6xl gap-4 px-4 sm:grid-cols-2 lg:grid-cols-3"
           >
             {features.map((f, i) => (
               <div
@@ -144,13 +134,13 @@ export default function Landing() {
 
         <section className="border-t border-border bg-card/50 px-4 py-16 sm:py-24">
           <div className="mx-auto max-w-4xl text-center">
-            <h2 className="mb-4 text-2xl font-bold text-foreground sm:text-3xl">How ArcLend Works</h2>
-            <p className="mb-12 text-muted-foreground">DeFi lending made simple across multiple chains</p>
+            <h2 className="mb-4 text-2xl font-bold text-foreground sm:text-3xl">Get Started in Minutes</h2>
+            <p className="mb-12 text-muted-foreground">No sign-ups. No KYC. Just connect and go.</p>
             <div className="grid gap-8 sm:grid-cols-3">
               {[
-                { step: "01", title: "Connect Wallet", desc: "Connect MetaMask, Coinbase Wallet, or any EVM wallet to get started." },
-                { step: "02", title: "Choose Network", desc: "Select Base Sepolia for ETH/WETH/USDT or Rialo Testnet for RIA/WETH/USDT." },
-                { step: "03", title: "Start Trading", desc: "Supply, borrow, swap tokens, or provide liquidity to earn rewards." },
+                { step: "01", title: "Connect Your Wallet", desc: "Use MetaMask, Coinbase Wallet, Rainbow, or any WalletConnect-compatible wallet to get started instantly." },
+                { step: "02", title: "Choose Your Action", desc: "Supply assets to earn yield, borrow against collateral, swap tokens, provide liquidity, or deploy contracts — it's all here." },
+                { step: "03", title: "Monitor & Earn", desc: "Track your positions, health factor, and earnings in real-time. Set alerts to stay informed about liquidation risks." },
               ].map((item, i) => (
                 <motion.div
                   key={i}

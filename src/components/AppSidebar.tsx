@@ -1,5 +1,5 @@
 import { LayoutDashboard, Store, Layers, Activity, BookOpen, ArrowLeftRight, Droplets, Coins, Rocket, X } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import logo from "@/assets/logo.png";
 import { WalletButton } from "./WalletButton";
 import { ThemeToggle } from "./ThemeToggle";
@@ -21,10 +21,10 @@ export function AppSidebar({ onClose }: { onClose: () => void }) {
   return (
     <div className="flex h-full flex-col border-r border-border bg-card">
       <div className="flex items-center justify-between p-4">
-        <div className="flex items-center gap-3">
+        <Link to="/" className="flex items-center gap-3">
           <img src={logo} alt="ArcLend" className="h-8 w-8" />
           <span className="text-lg font-bold text-foreground">ArcLend</span>
-        </div>
+        </Link>
         <div className="flex items-center gap-1">
           <ThemeToggle />
           <button onClick={onClose} className="text-muted-foreground md:hidden">
