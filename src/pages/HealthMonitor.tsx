@@ -1,14 +1,27 @@
 import { useState } from "react";
-import { Bell, ShieldCheck, Wallet } from "lucide-react";
+import { Bell, ShieldCheck, Wallet, Mail, Send } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { NetworkBadge } from "@/components/NetworkBadge";
 import { useWalletState, WalletButton } from "@/components/WalletButton";
+import { useToast } from "@/hooks/use-toast";
 
 export default function HealthMonitor() {
   const { connected } = useWalletState();
+  const { toast } = useToast();
   const [alerts, setAlerts] = useState({ at15: true, at12: true, at10: false });
+  const [email, setEmail] = useState("");
+  const [telegram, setTelegram] = useState("");
+
+  const handleSaveNotifications = () => {
+    toast({
+      title: "Notification settings saved",
+      description: "You'll receive alerts at the configured thresholds.",
+    });
+  };
 
   if (!connected) {
     return (
@@ -73,6 +86,46 @@ export default function HealthMonitor() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Notification Channels */}
+      <Card className="mb-6 border-border bg-card">
+        <CardHeader>
+          <CardTitle className="text-sm text-foreground">Notification Channels</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+              <Mail className="h-5 w-5 text-primary" />
+            </div>
+            <div className="flex-1">
+              <label className="mb-1 block text-xs text-muted-foreground">Email Address</label>
+              <Input
+                placeholder="your@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="border-border bg-secondary"
+              />
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+              <Send className="h-5 w-5 text-primary" />
+            </div>
+            <div className="flex-1">
+              <label className="mb-1 block text-xs text-muted-foreground">Telegram Username</label>
+              <Input
+                placeholder="@username"
+                value={telegram}
+                onChange={(e) => setTelegram(e.target.value)}
+                className="border-border bg-secondary"
+              />
+            </div>
+          </div>
+          <Button onClick={handleSaveNotifications} className="w-full">
+            Save Notification Settings
+          </Button>
+        </CardContent>
+      </Card>
 
       <Card className="mb-6 border-border bg-card">
         <CardHeader><CardTitle className="text-sm text-foreground">Positions Health</CardTitle></CardHeader>

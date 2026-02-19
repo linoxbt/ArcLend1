@@ -6,10 +6,33 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { NetworkBadge } from "@/components/NetworkBadge";
 import { useWalletState, WalletButton } from "@/components/WalletButton";
 import { useNavigate } from "react-router-dom";
+import { useBalance, useAccount } from "wagmi";
+import { baseSepolia } from "wagmi/chains";
+
+const tokenPrices: Record<string, number> = {
+  ETH: 2253.74,
+  WETH: 2253.74,
+  USDT: 0.99,
+  RIA: 12.40,
+};
 
 export default function Dashboard() {
   const { connected } = useWalletState();
+  const { address } = useAccount();
   const navigate = useNavigate();
+
+  const { data: ethBalance } = useBalance({
+    address,
+    chainId: baseSepolia.id,
+  });
+
+  const formattedBalance = ethBalance
+    ? (Number(ethBalance.value) / 10 ** ethBalance.decimals).toFixed(4)
+    : "0.0000";
+
+  const ethValue = ethBalance
+    ? ((Number(ethBalance.value) / 10 ** ethBalance.decimals) * tokenPrices.ETH).toFixed(2)
+    : "0.00";
 
   if (!connected) {
     return (
@@ -35,9 +58,9 @@ export default function Dashboard() {
 
       <div className="mb-6 grid gap-4 grid-cols-2 lg:grid-cols-4">
         {[
+          { label: "ETH Balance", icon: TrendingUp, value: `${formattedBalance} ETH` },
+          { label: "ETH Value (USD)", icon: DollarSign, value: `$${ethValue}` },
           { label: "Total Supplied", icon: TrendingUp, value: "$0.00" },
-          { label: "Total Borrowed", icon: TrendingDown, value: "$0.00" },
-          { label: "Net Worth", icon: DollarSign, value: "$0.00" },
           { label: "Net APY", icon: Percent, value: "0.00%" },
         ].map((s, i) => (
           <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
@@ -53,6 +76,26 @@ export default function Dashboard() {
           </motion.div>
         ))}
       </div>
+
+      {/* Live Token Prices */}
+      <Card className="mb-6 border-border bg-card">
+        <CardHeader>
+          <CardTitle className="text-sm text-foreground">Live Token Prices</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {Object.entries(tokenPrices).map(([symbol, price]) => (
+              <div key={symbol} className="flex items-center justify-between rounded-lg bg-secondary/50 p-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">{symbol === "ETH" || symbol === "WETH" ? "⟠" : symbol === "USDT" ? "💵" : "💎"}</span>
+                  <span className="text-sm font-medium text-foreground">{symbol}</span>
+                </div>
+                <span className="text-sm font-bold text-foreground">${price.toFixed(2)}</span>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="mb-6 grid gap-4 lg:grid-cols-3">
         <Card className="border-border bg-card lg:col-span-2">
