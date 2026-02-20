@@ -13,6 +13,7 @@ import Liquidity from "./pages/Liquidity";
 import Faucet from "./pages/Faucet";
 import DeployGuide from "./pages/DeployGuide";
 import Docs from "./pages/Docs";
+import ComingSoon from "./pages/ComingSoon";
 import NotFound from "./pages/NotFound";
 
 const App = () => (
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/faucet" element={<Faucet />} />
           <Route path="/deploy" element={<DeployGuide />} />
           <Route path="/docs" element={<Docs />} />
+          <Route path="/coming-soon/:feature" element={<ComingSoon />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

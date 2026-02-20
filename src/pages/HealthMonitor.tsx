@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Bell, ShieldCheck, Wallet, Mail, Send } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Bell, ShieldCheck, Wallet, Mail, Send, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
@@ -8,19 +8,67 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { NetworkBadge } from "@/components/NetworkBadge";
 import { useWalletState, WalletButton } from "@/components/WalletButton";
 import { useToast } from "@/hooks/use-toast";
+import { useAccount } from "wagmi";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function HealthMonitor() {
   const { connected } = useWalletState();
+  const { address } = useAccount();
   const { toast } = useToast();
   const [alerts, setAlerts] = useState({ at15: true, at12: true, at10: false });
   const [email, setEmail] = useState("");
   const [telegram, setTelegram] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const handleSaveNotifications = () => {
-    toast({
-      title: "Notification settings saved",
-      description: "You'll receive alerts at the configured thresholds.",
-    });
+  // Load saved settings
+  useEffect(() => {
+    if (!address) return;
+    setLoading(true);
+    supabase
+      .from("alert_settings")
+      .select("*")
+      .eq("wallet_address", address.toLowerCase())
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data) {
+          setEmail(data.email || "");
+          setTelegram(data.telegram || "");
+          setAlerts({
+            at15: data.alert_at_15,
+            at12: data.alert_at_12,
+            at10: data.alert_at_10,
+          });
+        }
+        setLoading(false);
+      });
+  }, [address]);
+
+  const handleSaveNotifications = async () => {
+    if (!address) return;
+    setSaving(true);
+    const payload = {
+      wallet_address: address.toLowerCase(),
+      email: email || null,
+      telegram: telegram || null,
+      alert_at_15: alerts.at15,
+      alert_at_12: alerts.at12,
+      alert_at_10: alerts.at10,
+    };
+
+    const { error } = await supabase
+      .from("alert_settings")
+      .upsert(payload, { onConflict: "wallet_address" });
+
+    setSaving(false);
+    if (error) {
+      toast({ title: "Error saving settings", description: error.message, variant: "destructive" });
+    } else {
+      toast({
+        title: "Settings saved",
+        description: "You'll receive alerts at the configured thresholds.",
+      });
+    }
   };
 
   if (!connected) {
@@ -48,7 +96,7 @@ export default function HealthMonitor() {
       <Card className="mb-6 glow-purple border-primary/20 bg-primary/5">
         <CardContent className="flex items-center gap-3 p-4">
           <ShieldCheck className="h-5 w-5 shrink-0 text-primary" />
-          <p className="text-sm text-primary">Monitor your health factors across Base Sepolia and Rialo Testnet positions</p>
+          <p className="text-sm text-primary">Monitor your health factors and set up alerts across your positions.</p>
         </CardContent>
       </Card>
 
@@ -121,8 +169,8 @@ export default function HealthMonitor() {
               />
             </div>
           </div>
-          <Button onClick={handleSaveNotifications} className="w-full">
-            Save Notification Settings
+          <Button onClick={handleSaveNotifications} className="w-full" disabled={saving}>
+            {saving ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...</> : "Save Notification Settings"}
           </Button>
         </CardContent>
       </Card>

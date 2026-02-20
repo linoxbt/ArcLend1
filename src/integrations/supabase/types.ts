@@ -14,7 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      alert_settings: {
+        Row: {
+          alert_at_10: boolean
+          alert_at_12: boolean
+          alert_at_15: boolean
+          created_at: string
+          email: string | null
+          id: string
+          telegram: string | null
+          updated_at: string
+          wallet_address: string
+        }
+        Insert: {
+          alert_at_10?: boolean
+          alert_at_12?: boolean
+          alert_at_15?: boolean
+          created_at?: string
+          email?: string | null
+          id?: string
+          telegram?: string | null
+          updated_at?: string
+          wallet_address: string
+        }
+        Update: {
+          alert_at_10?: boolean
+          alert_at_12?: boolean
+          alert_at_15?: boolean
+          created_at?: string
+          email?: string | null
+          id?: string
+          telegram?: string | null
+          updated_at?: string
+          wallet_address?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
