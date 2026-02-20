@@ -12,32 +12,32 @@ const features = [
   {
     icon: BarChart3,
     title: "Lending & Borrowing",
-    desc: "Supply assets to earn competitive yields or leverage your portfolio by borrowing against your collateral with dynamic interest rates.",
+    desc: "Supply assets to earn yield or borrow against your collateral with dynamic interest rates.",
   },
   {
     icon: ArrowLeftRight,
     title: "Token Swap",
-    desc: "Swap between supported tokens instantly with minimal slippage powered by our AMM liquidity pools.",
+    desc: "Swap tokens instantly with minimal slippage powered by AMM liquidity pools.",
   },
   {
     icon: Droplets,
     title: "Liquidity Pools",
-    desc: "Provide liquidity to earn 0.3% trading fees on every swap. Track your positions, TVL, and APR in real-time.",
+    desc: "Provide liquidity to earn 0.3% trading fees on every swap.",
   },
   {
     icon: Coins,
     title: "Testnet Faucet",
-    desc: "Get free testnet tokens to start exploring the protocol. Claim USDT, WETH, and more with a single click.",
+    desc: "Claim free testnet tokens to start exploring the protocol.",
   },
   {
     icon: Shield,
     title: "Health Monitoring",
-    desc: "Track your collateral health factor in real-time. Set up email and Telegram alerts to stay ahead of liquidation risks.",
+    desc: "Track your health factor and set up alerts to stay ahead of liquidation.",
   },
   {
     icon: Zap,
     title: "Contract Deployment",
-    desc: "Deploy ERC-20 tokens, NFTs, staking contracts, and more directly from the browser. No CLI needed.",
+    desc: "Deploy tokens, NFTs, and DeFi contracts directly from the browser.",
   },
 ];
 
@@ -84,8 +84,8 @@ export default function Landing() {
               <span className="text-gradient-purple">DeFi Protocol</span>
             </h1>
 
-            <p className="mx-auto mb-10 max-w-2xl text-base text-muted-foreground sm:text-lg">
-              ArcLend is a full-featured decentralized finance protocol built for EVM chains. Supply and borrow assets with dynamic interest rates, swap tokens through AMM-powered liquidity pools, deploy smart contracts, and monitor your portfolio health — all from one seamless interface across Base Sepolia and Rialo testnets.
+            <p className="mx-auto mb-10 max-w-xl text-base text-muted-foreground sm:text-lg">
+              Lend, borrow, swap, provide liquidity, and deploy contracts — all from one unified protocol built for EVM chains.
             </p>
 
             <div className="mb-16 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
@@ -138,9 +138,9 @@ export default function Landing() {
             <p className="mb-12 text-muted-foreground">No sign-ups. No KYC. Just connect and go.</p>
             <div className="grid gap-8 sm:grid-cols-3">
               {[
-                { step: "01", title: "Connect Your Wallet", desc: "Use MetaMask, Coinbase Wallet, Rainbow, or any WalletConnect-compatible wallet to get started instantly." },
-                { step: "02", title: "Choose Your Action", desc: "Supply assets to earn yield, borrow against collateral, swap tokens, provide liquidity, or deploy contracts — it's all here." },
-                { step: "03", title: "Monitor & Earn", desc: "Track your positions, health factor, and earnings in real-time. Set alerts to stay informed about liquidation risks." },
+                { step: "01", title: "Connect Wallet", desc: "Use MetaMask, Coinbase Wallet, or any WalletConnect-compatible wallet." },
+                { step: "02", title: "Choose Your Action", desc: "Supply, borrow, swap, provide liquidity, or deploy contracts." },
+                { step: "03", title: "Monitor & Earn", desc: "Track positions, health factor, and earnings in real-time." },
               ].map((item, i) => (
                 <motion.div
                   key={i}

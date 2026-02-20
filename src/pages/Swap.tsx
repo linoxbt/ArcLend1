@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowDownUp, Wallet, Settings, RefreshCw } from "lucide-react";
+import { ArrowDownUp, Wallet, Settings, RefreshCw, Info } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,14 +11,8 @@ import { useWalletState, WalletButton } from "@/components/WalletButton";
 import { useToast } from "@/hooks/use-toast";
 import { useTokenPrices } from "@/hooks/use-token-prices";
 
-const baseTokens = [
+const tokens = [
   { symbol: "ETH", name: "Ether", icon: "⟠" },
-  { symbol: "WETH", name: "Wrapped Ether", icon: "⟠" },
-  { symbol: "USDT", name: "Tether USD", icon: "💵" },
-];
-
-const rialoTokens = [
-  { symbol: "RIA", name: "Rialo Token", icon: "💎" },
   { symbol: "WETH", name: "Wrapped Ether", icon: "⟠" },
   { symbol: "USDT", name: "Tether USD", icon: "💵" },
 ];
@@ -27,15 +21,12 @@ export default function Swap() {
   const { connected } = useWalletState();
   const { toast } = useToast();
   const { prices: tokenPrices, refresh: refreshPrices } = useTokenPrices();
-  const [network, setNetwork] = useState<"base-sepolia" | "rialo">("base-sepolia");
   const [fromToken, setFromToken] = useState("ETH");
   const [toToken, setToToken] = useState("USDT");
   const [fromAmount, setFromAmount] = useState("");
   const [slippage, setSlippage] = useState("0.5");
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-
-  const tokens = network === "base-sepolia" ? baseTokens : rialoTokens;
 
   const handleSwap = () => {
     toast({
@@ -60,6 +51,10 @@ export default function Swap() {
     ? ((parseFloat(fromAmount) * tokenPrices[fromToken]) / tokenPrices[toToken]).toFixed(4)
     : "";
 
+  const rate = tokenPrices[fromToken] && tokenPrices[toToken]
+    ? (tokenPrices[fromToken] / tokenPrices[toToken]).toFixed(4)
+    : "—";
+
   return (
     <DashboardLayout>
       <div className="mx-auto max-w-lg">
@@ -75,20 +70,9 @@ export default function Swap() {
                   <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setSettingsOpen(true)}>
                     <Settings className="h-4 w-4" />
                   </Button>
-                  <Select value={network} onValueChange={(v) => { setNetwork(v as any); setFromToken(v === "base-sepolia" ? "ETH" : "RIA"); setToToken("USDT"); }}>
-                    <SelectTrigger className="h-8 w-32 border-border bg-secondary text-xs">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="base-sepolia">Base Sepolia</SelectItem>
-                      <SelectItem value="rialo">Rialo</SelectItem>
-                    </SelectContent>
-                  </Select>
                 </div>
               </CardTitle>
-              <p className="text-xs text-muted-foreground">
-                Exchange tokens instantly on {network === "base-sepolia" ? "Base Sepolia" : "Rialo testnet"}
-              </p>
+              <p className="text-xs text-muted-foreground">Exchange tokens instantly on Base Sepolia</p>
             </CardHeader>
             <CardContent className="space-y-3">
               {/* From */}
@@ -151,11 +135,12 @@ export default function Swap() {
                 </div>
               </div>
 
-              {/* Details */}
+              {/* Route info */}
               <div className="rounded-lg border border-border bg-secondary/30 p-3 space-y-1.5 text-xs text-muted-foreground">
-                <div className="flex justify-between"><span>Rate</span><span className="text-foreground">1 {fromToken} = {(tokenPrices[fromToken] / tokenPrices[toToken]).toFixed(4)} {toToken}</span></div>
+                <div className="flex justify-between"><span>Rate</span><span className="text-foreground">1 {fromToken} = {rate} {toToken}</span></div>
                 <div className="flex justify-between"><span>Slippage Tolerance</span><span className="text-foreground">{slippage}%</span></div>
                 <div className="flex justify-between"><span>Network Fee</span><span className="text-foreground">~$0.01</span></div>
+                <div className="flex justify-between"><span>Route</span><span className="text-foreground">{fromToken} → {toToken}</span></div>
               </div>
 
               {connected ? (
@@ -169,7 +154,7 @@ export default function Swap() {
               )}
 
               <p className="text-center text-[10px] text-muted-foreground">
-                Swaps are executed on {network === "base-sepolia" ? "Base Sepolia" : "Rialo testnet"}. Deploy the SwapRouter contract and update the address in the config to enable real swaps.
+                Swaps are executed on Base Sepolia. Deploy the SwapRouter contract to enable real swaps.
               </p>
             </CardContent>
           </Card>
@@ -202,7 +187,7 @@ export default function Swap() {
         <DialogContent className="border-border bg-card sm:max-w-sm">
           <DialogHeader>
             <DialogTitle className="text-foreground">Swap Settings</DialogTitle>
-            <DialogDescription className="text-muted-foreground">Configure slippage tolerance for your swaps</DialogDescription>
+            <DialogDescription className="text-muted-foreground">Configure slippage tolerance</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-2">
             <div>

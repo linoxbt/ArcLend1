@@ -1,553 +1,354 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { BookOpen, Terminal, Code, Layers, Zap, ExternalLink, AlertTriangle, CheckCircle, FileCode, Rocket } from "lucide-react";
+import {
+  BookOpen, BarChart3, ArrowLeftRight, Droplets, Coins, Shield, Rocket,
+  Activity, Users, Gavel, Clock, ChevronRight, ExternalLink
+} from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
-const sections = [
+interface DocSection {
+  id: string;
+  icon: React.ReactNode;
+  title: string;
+  comingSoon?: boolean;
+  content: React.ReactNode;
+}
+
+const sections: DocSection[] = [
   {
     id: "overview",
-    icon: BookOpen,
-    title: "1. Overview — What is ArcLend?",
-    content: `ArcLend is a complete DeFi protocol deployed on Base Sepolia and Rialo Network Testnet. It provides:
-
-• **Lending & Borrowing** — Supply assets to earn yield, borrow against collateral with dynamic interest rates
-• **Token Swaps** — Instant swaps between supported tokens via AMM pools
-• **Liquidity Provision** — Provide liquidity to earn 0.3% trading fees on every swap
-• **Testnet Faucet** — Claim free tokens to experiment with the protocol
-• **Health Monitoring** — Track collateral ratios and set up email/Telegram liquidation alerts
-• **Contract Deployment** — Deploy ERC-20, NFT, staking, and custom contracts directly from the browser
-
-**Supported Networks & Assets:**
-• **Base Sepolia** — ETH (gas), WETH (protocol token), USDT (protocol token)
-• **Rialo Testnet** — RIA (native gas token), WETH (protocol token), USDT (protocol token)
-
-**Important:** ETH is the only "real" token on Base Sepolia. WETH and USDT are custom ERC-20 tokens deployed specifically for testing ArcLend. You must deploy them using the contracts below.`,
+    icon: <BookOpen className="h-4 w-4" />,
+    title: "Overview",
+    content: (
+      <div className="space-y-4 text-sm text-muted-foreground">
+        <p>
+          <strong className="text-foreground">ArcLend</strong> is a full-featured decentralized finance protocol built for EVM-compatible chains. 
+          It enables users to lend, borrow, swap tokens, provide liquidity, deploy smart contracts, and monitor portfolio health — all from one unified interface.
+        </p>
+        <p>ArcLend is currently deployed on <strong className="text-foreground">Base Sepolia</strong> (testnet) with <strong className="text-foreground">Rialo Network</strong> support coming soon.</p>
+        <div className="rounded-lg border border-border bg-secondary/30 p-4">
+          <p className="mb-2 font-semibold text-foreground">Supported Assets</p>
+          <div className="space-y-1.5">
+            <p>⟠ <strong className="text-foreground">ETH</strong> — Native gas token on Base Sepolia</p>
+            <p>⟠ <strong className="text-foreground">WETH</strong> — Wrapped Ether (protocol test token)</p>
+            <p>💵 <strong className="text-foreground">USDT</strong> — Tether USD (protocol test token)</p>
+          </div>
+        </div>
+      </div>
+    ),
   },
   {
-    id: "architecture",
-    icon: Layers,
-    title: "2. Architecture & Smart Contracts",
-    content: `ArcLend requires these contracts deployed on **Base Sepolia** (trial network):
-
-**Core Contracts:**
-1. **LendingPool.sol** — Main lending/borrowing logic, interest accrual, health factor computation
-2. **AToken.sol** — Interest-bearing ERC-20 tokens minted to suppliers
-3. **DebtToken.sol** — Debt tracking ERC-20 tokens for borrowers
-4. **PriceOracle.sol** — Asset price feeds for collateral valuation
-
-**Token Contracts (Protocol-only, for testing):**
-5. **MockUSDT.sol** — ERC-20 mock USDT (6 decimals, mintable)
-6. **MockWETH.sol** — ERC-20 mock WETH (18 decimals, mintable)
-7. **Faucet.sol** — Distributes test tokens to users with 24h cooldown
-
-**DEX Contracts:**
-8. **SwapRouter.sol** — AMM swap router
-9. **LiquidityPool.sol** — AMM liquidity pool (constant product x*y=k)`,
+    id: "lending",
+    icon: <BarChart3 className="h-4 w-4" />,
+    title: "Lending & Borrowing",
+    content: (
+      <div className="space-y-4 text-sm text-muted-foreground">
+        <p>ArcLend's lending protocol allows users to supply assets to earn interest and borrow against their collateral, inspired by Aave's proven model.</p>
+        <div className="rounded-lg border border-border bg-secondary/30 p-4 space-y-3">
+          <div>
+            <p className="font-semibold text-foreground">Supplying</p>
+            <p>Deposit supported assets into the protocol to earn variable interest. Supplied assets can be used as collateral for borrowing. Each asset has a Collateral Factor (LTV) that determines how much you can borrow against it.</p>
+          </div>
+          <div>
+            <p className="font-semibold text-foreground">Borrowing</p>
+            <p>Borrow assets against your supplied collateral. Interest accrues at a variable rate based on utilization. Monitor your Health Factor — if it drops below 1.0, your position may be liquidated.</p>
+          </div>
+          <div>
+            <p className="font-semibold text-foreground">Key Parameters</p>
+            <ul className="list-inside list-disc space-y-1">
+              <li>Supply APY — Interest earned on deposits</li>
+              <li>Borrow APY — Interest paid on loans</li>
+              <li>Collateral Factor (LTV) — Max borrow ratio against collateral</li>
+              <li>Liquidation Threshold — Point at which positions become liquidatable</li>
+              <li>Liquidation Penalty — Fee applied during liquidation (5%)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    ),
   },
   {
-    id: "mockusdt",
-    icon: FileCode,
-    title: "3. MockUSDT.sol — Deploy First",
-    content: `\`\`\`solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
-
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-
-contract MockUSDT is ERC20, Ownable {
-    constructor() ERC20("ArcLend USDT", "USDT") Ownable(msg.sender) {
-        _mint(msg.sender, 1_000_000 * 10**decimals());
-    }
-
-    function decimals() public pure override returns (uint8) {
-        return 6;
-    }
-
-    function mint(address to, uint256 amount) external {
-        _mint(to, amount);
-    }
-}
-\`\`\`
-
-**Remix Deployment Steps:**
-1. Open [Remix IDE](https://remix.ethereum.org)
-2. Create a new file \`MockUSDT.sol\` and paste the code above
-3. In the Solidity Compiler tab, select compiler version \`0.8.20\`
-4. Click "Compile MockUSDT.sol"
-5. Go to "Deploy & Run Transactions" tab
-6. Set Environment to "Injected Provider - MetaMask"
-7. Make sure MetaMask is connected to **Base Sepolia** (Chain ID: 84532)
-8. Click "Deploy" and confirm in MetaMask
-9. Copy the deployed contract address — you'll need it for the Faucet and LendingPool`,
+    id: "swap",
+    icon: <ArrowLeftRight className="h-4 w-4" />,
+    title: "Token Swap",
+    content: (
+      <div className="space-y-4 text-sm text-muted-foreground">
+        <p>ArcLend's swap interface allows instant token exchanges using an Automated Market Maker (AMM) model, inspired by Jupiter and Uniswap.</p>
+        <div className="rounded-lg border border-border bg-secondary/30 p-4 space-y-3">
+          <div>
+            <p className="font-semibold text-foreground">How It Works</p>
+            <p>Swaps are executed through on-chain liquidity pools using the constant product formula (x × y = k). A 0.3% fee is charged on each swap, distributed to liquidity providers.</p>
+          </div>
+          <div>
+            <p className="font-semibold text-foreground">Features</p>
+            <ul className="list-inside list-disc space-y-1">
+              <li>Real-time price feeds via CoinGecko</li>
+              <li>Configurable slippage tolerance (0.1% – custom)</li>
+              <li>Live exchange rate display</li>
+              <li>Estimated output calculation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    ),
   },
   {
-    id: "mockweth",
-    icon: FileCode,
-    title: "4. MockWETH.sol",
-    content: `\`\`\`solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
-
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-
-contract MockWETH is ERC20, Ownable {
-    constructor() ERC20("ArcLend WETH", "WETH") Ownable(msg.sender) {
-        _mint(msg.sender, 10_000 * 10**decimals());
-    }
-
-    function mint(address to, uint256 amount) external {
-        _mint(to, amount);
-    }
-}
-\`\`\`
-
-**Deploy using the same Remix steps as MockUSDT.** Save the deployed address.`,
-  },
-  {
-    id: "priceoracle",
-    icon: FileCode,
-    title: "5. PriceOracle.sol",
-    content: `\`\`\`solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
-
-import "@openzeppelin/contracts/access/Ownable.sol";
-
-contract PriceOracle is Ownable {
-    mapping(address => uint256) public prices; // price in USD with 8 decimals
-
-    constructor() Ownable(msg.sender) {}
-
-    function setPrice(address asset, uint256 price) external onlyOwner {
-        prices[asset] = price;
-    }
-
-    function getPrice(address asset) external view returns (uint256) {
-        require(prices[asset] > 0, "Price not set");
-        return prices[asset];
-    }
-}
-\`\`\`
-
-**After deploying:**
-1. Call \`setPrice(USDT_ADDRESS, 100000000)\` — sets USDT = $1.00
-2. Call \`setPrice(WETH_ADDRESS, 225374000000)\` — sets WETH = $2253.74`,
-  },
-  {
-    id: "lendingpool",
-    icon: FileCode,
-    title: "6. LendingPool.sol — Core Contract",
-    content: `\`\`\`solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
-
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-
-contract LendingPool is Ownable, ReentrancyGuard {
-    struct Reserve {
-        address aTokenAddress;
-        address debtTokenAddress;
-        uint256 liquidationThreshold;
-        uint256 ltv;
-        uint256 totalSupplied;
-        uint256 totalBorrowed;
-        uint256 supplyRate;
-        uint256 borrowRate;
-        bool isActive;
-    }
-
-    struct UserPosition {
-        uint256 supplied;
-        uint256 borrowed;
-    }
-
-    mapping(address => Reserve) public reserves;
-    mapping(address => mapping(address => UserPosition)) public userPositions;
-    address[] public reservesList;
-    address public priceOracle;
-
-    event Supply(address indexed user, address indexed asset, uint256 amount);
-    event Borrow(address indexed user, address indexed asset, uint256 amount);
-    event Repay(address indexed user, address indexed asset, uint256 amount);
-    event Withdraw(address indexed user, address indexed asset, uint256 amount);
-
-    constructor(address _priceOracle) Ownable(msg.sender) {
-        priceOracle = _priceOracle;
-    }
-
-    function initReserve(
-        address asset,
-        address aToken,
-        address debtToken,
-        uint256 liquidationThreshold,
-        uint256 ltv
-    ) external onlyOwner {
-        reserves[asset] = Reserve({
-            aTokenAddress: aToken,
-            debtTokenAddress: debtToken,
-            liquidationThreshold: liquidationThreshold,
-            ltv: ltv,
-            totalSupplied: 0,
-            totalBorrowed: 0,
-            supplyRate: 300,
-            borrowRate: 500,
-            isActive: true
-        });
-        reservesList.push(asset);
-    }
-
-    function supply(address asset, uint256 amount) external nonReentrant {
-        require(reserves[asset].isActive, "Reserve not active");
-        IERC20(asset).transferFrom(msg.sender, address(this), amount);
-        userPositions[asset][msg.sender].supplied += amount;
-        reserves[asset].totalSupplied += amount;
-        emit Supply(msg.sender, asset, amount);
-    }
-
-    function borrow(address asset, uint256 amount) external nonReentrant {
-        require(reserves[asset].isActive, "Reserve not active");
-        userPositions[asset][msg.sender].borrowed += amount;
-        reserves[asset].totalBorrowed += amount;
-        IERC20(asset).transfer(msg.sender, amount);
-        emit Borrow(msg.sender, asset, amount);
-    }
-
-    function repay(address asset, uint256 amount) external nonReentrant {
-        IERC20(asset).transferFrom(msg.sender, address(this), amount);
-        userPositions[asset][msg.sender].borrowed -= amount;
-        reserves[asset].totalBorrowed -= amount;
-        emit Repay(msg.sender, asset, amount);
-    }
-
-    function withdraw(address asset, uint256 amount) external nonReentrant {
-        userPositions[asset][msg.sender].supplied -= amount;
-        reserves[asset].totalSupplied -= amount;
-        IERC20(asset).transfer(msg.sender, amount);
-        emit Withdraw(msg.sender, asset, amount);
-    }
-
-    function getHealthFactor(address user) external view returns (uint256) {
-        uint256 totalCollateralETH = 0;
-        uint256 totalDebtETH = 0;
-        for (uint i = 0; i < reservesList.length; i++) {
-            address asset = reservesList[i];
-            UserPosition memory pos = userPositions[asset][user];
-            totalCollateralETH += pos.supplied;
-            totalDebtETH += pos.borrowed;
-        }
-        if (totalDebtETH == 0) return type(uint256).max;
-        return (totalCollateralETH * 10000) / totalDebtETH;
-    }
-}
-\`\`\`
-
-**Deploy with constructor argument:** Pass the PriceOracle contract address.
-
-**After deploying, initialize reserves:**
-1. Call \`initReserve(USDT_ADDRESS, aTokenAddr, debtTokenAddr, 8000, 7500)\`
-2. Call \`initReserve(WETH_ADDRESS, aTokenAddr, debtTokenAddr, 8200, 7800)\``,
+    id: "liquidity",
+    icon: <Droplets className="h-4 w-4" />,
+    title: "Liquidity Pools",
+    content: (
+      <div className="space-y-4 text-sm text-muted-foreground">
+        <p>Provide liquidity to ArcLend's AMM pools and earn a share of trading fees on every swap.</p>
+        <div className="rounded-lg border border-border bg-secondary/30 p-4 space-y-3">
+          <div>
+            <p className="font-semibold text-foreground">Adding Liquidity</p>
+            <p>Deposit equal value of two tokens into a pool. You receive LP tokens representing your share of the pool. Earn 0.3% of all trading fees proportional to your share.</p>
+          </div>
+          <div>
+            <p className="font-semibold text-foreground">Removing Liquidity</p>
+            <p>Burn your LP tokens to withdraw your proportional share of both tokens plus accumulated fees.</p>
+          </div>
+          <div>
+            <p className="font-semibold text-foreground">Available Pools</p>
+            <ul className="list-inside list-disc space-y-1">
+              <li>WETH / USDT</li>
+              <li>ETH / USDT</li>
+              <li>ETH / WETH</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    ),
   },
   {
     id: "faucet",
-    icon: FileCode,
-    title: "7. Faucet.sol",
-    content: `\`\`\`solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
-
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-
-contract Faucet is Ownable {
-    mapping(address => mapping(address => uint256)) public lastClaim;
-    uint256 public cooldown = 24 hours;
-    mapping(address => uint256) public claimAmounts;
-
-    constructor() Ownable(msg.sender) {}
-
-    function setClaimAmount(address token, uint256 amount) external onlyOwner {
-        claimAmounts[token] = amount;
-    }
-
-    function claim(address token) external {
-        require(
-            block.timestamp - lastClaim[msg.sender][token] >= cooldown,
-            "Cooldown active"
-        );
-        uint256 amount = claimAmounts[token];
-        require(amount > 0, "Token not configured");
-        lastClaim[msg.sender][token] = block.timestamp;
-        IERC20(token).transfer(msg.sender, amount);
-    }
-
-    function claimAll(address[] calldata tokens) external {
-        for (uint i = 0; i < tokens.length; i++) {
-            if (block.timestamp - lastClaim[msg.sender][tokens[i]] >= cooldown) {
-                uint256 amount = claimAmounts[tokens[i]];
-                if (amount > 0) {
-                    lastClaim[msg.sender][tokens[i]] = block.timestamp;
-                    IERC20(tokens[i]).transfer(msg.sender, amount);
-                }
-            }
-        }
-    }
-}
-\`\`\`
-
-**After deploying:**
-1. Call \`setClaimAmount(USDT_ADDRESS, 1000000)\` — 1 USDT (6 decimals)
-2. Call \`setClaimAmount(WETH_ADDRESS, 1000000000000000000)\` — 1 WETH (18 decimals)
-3. Mint tokens to the Faucet contract:
-   - Call \`MockUSDT.mint(FAUCET_ADDRESS, 1000000000000)\` — 1M USDT
-   - Call \`MockWETH.mint(FAUCET_ADDRESS, 10000000000000000000000)\` — 10K WETH`,
+    icon: <Coins className="h-4 w-4" />,
+    title: "Testnet Faucet",
+    content: (
+      <div className="space-y-4 text-sm text-muted-foreground">
+        <p>The faucet distributes free testnet tokens so users can experiment with the protocol without needing real assets.</p>
+        <div className="rounded-lg border border-border bg-secondary/30 p-4 space-y-3">
+          <div>
+            <p className="font-semibold text-foreground">Available Tokens</p>
+            <ul className="list-inside list-disc space-y-1">
+              <li>USDT — 1 USDT per claim</li>
+              <li>WETH — 1 WETH per claim</li>
+              <li>ALND — 1 ALND per claim (governance token)</li>
+            </ul>
+          </div>
+          <div>
+            <p className="font-semibold text-foreground">Rules</p>
+            <p>Each token can be claimed once every 24 hours. Use "Claim All Tokens" to claim everything at once. Native gas tokens (ETH) must be obtained from the network's official faucet.</p>
+          </div>
+        </div>
+      </div>
+    ),
   },
   {
-    id: "liquiditypool",
-    icon: FileCode,
-    title: "8. LiquidityPool.sol & SwapRouter",
-    content: `\`\`\`solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
-
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-
-contract LiquidityPool is ERC20 {
-    IERC20 public tokenA;
-    IERC20 public tokenB;
-    uint256 public reserveA;
-    uint256 public reserveB;
-
-    constructor(address _tokenA, address _tokenB) ERC20("ArcLend LP", "ARC-LP") {
-        tokenA = IERC20(_tokenA);
-        tokenB = IERC20(_tokenB);
-    }
-
-    function addLiquidity(uint256 amountA, uint256 amountB) external returns (uint256 liquidity) {
-        tokenA.transferFrom(msg.sender, address(this), amountA);
-        tokenB.transferFrom(msg.sender, address(this), amountB);
-        liquidity = amountA + amountB;
-        _mint(msg.sender, liquidity);
-        reserveA += amountA;
-        reserveB += amountB;
-    }
-
-    function removeLiquidity(uint256 liquidity) external {
-        uint256 totalSupply_ = totalSupply();
-        uint256 amountA = (liquidity * reserveA) / totalSupply_;
-        uint256 amountB = (liquidity * reserveB) / totalSupply_;
-        _burn(msg.sender, liquidity);
-        reserveA -= amountA;
-        reserveB -= amountB;
-        tokenA.transfer(msg.sender, amountA);
-        tokenB.transfer(msg.sender, amountB);
-    }
-
-    function swap(address tokenIn, uint256 amountIn) external returns (uint256 amountOut) {
-        require(tokenIn == address(tokenA) || tokenIn == address(tokenB), "Invalid");
-        bool isA = tokenIn == address(tokenA);
-        (uint256 resIn, uint256 resOut) = isA ? (reserveA, reserveB) : (reserveB, reserveA);
-        uint256 amountInWithFee = amountIn * 997;
-        amountOut = (amountInWithFee * resOut) / (resIn * 1000 + amountInWithFee);
-        IERC20(tokenIn).transferFrom(msg.sender, address(this), amountIn);
-        if (isA) {
-            reserveA += amountIn;
-            reserveB -= amountOut;
-            tokenB.transfer(msg.sender, amountOut);
-        } else {
-            reserveB += amountIn;
-            reserveA -= amountOut;
-            tokenA.transfer(msg.sender, amountOut);
-        }
-    }
-}
-\`\`\`
-
-**Deploy one LiquidityPool per pair:**
-1. Deploy \`LiquidityPool(WETH_ADDRESS, USDT_ADDRESS)\` for WETH/USDT pool
-2. After deploying, seed with initial liquidity by calling \`addLiquidity\``,
+    id: "health",
+    icon: <Activity className="h-4 w-4" />,
+    title: "Health Monitor & Alerts",
+    content: (
+      <div className="space-y-4 text-sm text-muted-foreground">
+        <p>Monitor your collateral health factor in real-time and set up automated alerts to prevent liquidation.</p>
+        <div className="rounded-lg border border-border bg-secondary/30 p-4 space-y-3">
+          <div>
+            <p className="font-semibold text-foreground">Health Factor</p>
+            <p>Your health factor represents the safety of your borrowed position relative to your collateral. A health factor below 1.0 means your position is eligible for liquidation.</p>
+          </div>
+          <div>
+            <p className="font-semibold text-foreground">Alert Thresholds</p>
+            <ul className="list-inside list-disc space-y-1">
+              <li>HF ≤ 1.5 — Early warning</li>
+              <li>HF ≤ 1.2 — Caution zone</li>
+              <li>HF ≤ 1.0 — Liquidation risk</li>
+            </ul>
+          </div>
+          <div>
+            <p className="font-semibold text-foreground">Notification Channels</p>
+            <p>Configure email and Telegram alerts. Settings are saved to your wallet and persist across sessions.</p>
+          </div>
+        </div>
+      </div>
+    ),
   },
   {
-    id: "checklist",
-    icon: CheckCircle,
-    title: "9. Full Deployment Checklist (Base Sepolia)",
-    content: `**Step-by-step deployment order using Remix:**
-
-1. Deploy \`MockUSDT\` → save address
-2. Deploy \`MockWETH\` → save address
-3. Deploy \`PriceOracle\` → set prices for USDT and WETH
-4. Deploy \`LendingPool(oracleAddress)\` → initialize reserves
-5. Deploy \`Faucet\` → set claim amounts, mint tokens to faucet
-6. Deploy \`LiquidityPool(WETH, USDT)\` → seed with liquidity
-
-**Frontend Integration:**
-- [ ] Add all deployed contract addresses to \`src/lib/contracts.ts\`
-- [ ] Create ABIs from Remix artifacts (copy from Compilation Details)
-- [ ] Replace toast-based handlers with real \`useWriteContract\` calls
-- [ ] Add ERC-20 approval flows before supply/swap
-- [ ] Connect balance reading using \`useReadContract\`
-- [ ] Test full supply → borrow → repay → withdraw flow
-- [ ] Test swap functionality
-- [ ] Test faucet claims`,
+    id: "deploy",
+    icon: <Rocket className="h-4 w-4" />,
+    title: "Contract Deployment",
+    content: (
+      <div className="space-y-4 text-sm text-muted-foreground">
+        <p>Deploy smart contracts directly from ArcLend's interface — no CLI or development environment required.</p>
+        <div className="rounded-lg border border-border bg-secondary/30 p-4 space-y-3">
+          <div>
+            <p className="font-semibold text-foreground">Available Templates</p>
+            <ul className="list-inside list-disc space-y-1">
+              <li><strong>ERC-20 Token</strong> — Standard fungible token</li>
+              <li><strong>ERC-721 NFT</strong> — Non-fungible token for unique assets</li>
+              <li><strong>ERC-1155 Multi Token</strong> — Multi-token standard</li>
+              <li><strong>Staking Contract</strong> — Stake tokens and earn rewards</li>
+              <li><strong>Multi-Sig Wallet</strong> — Multi-signature approval wallet</li>
+              <li><strong>Token Vesting</strong> — Time-locked token release</li>
+              <li><strong>Custom Contract</strong> — Deploy any compiled bytecode</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    ),
   },
   {
-    id: "resources",
-    icon: ExternalLink,
-    title: "10. External Resources",
-    content: `**Development Tools:**
-• [Remix IDE](https://remix.ethereum.org) — Browser-based Solidity compiler & deployer
-• [OpenZeppelin Contracts](https://docs.openzeppelin.com/contracts) — Audited Solidity libraries
-• [wagmi Documentation](https://wagmi.sh) — React hooks for Ethereum
-• [RainbowKit](https://www.rainbowkit.com/docs) — Wallet connection UI
-
-**Base Sepolia:**
-• [Base Documentation](https://docs.base.org) — Base chain developer docs
-• [Base Sepolia Faucet](https://www.alchemy.com/faucets/base-sepolia) — Get testnet ETH
-• [BaseScan Sepolia](https://sepolia.basescan.org) — Block explorer
-
-**DeFi References:**
-• [Aave V3 Protocol](https://docs.aave.com) — Lending protocol reference
-• [Uniswap V2](https://docs.uniswap.org/contracts/v2/overview) — AMM reference implementation`,
+    id: "community",
+    icon: <Users className="h-4 w-4" />,
+    title: "Community Hub",
+    comingSoon: true,
+    content: (
+      <div className="space-y-4 text-sm text-muted-foreground">
+        <p>A dedicated space for the ArcLend community to connect, discuss proposals, share strategies, and stay updated on protocol developments.</p>
+        <div className="rounded-lg border border-border bg-secondary/30 p-4">
+          <p className="font-semibold text-foreground">Planned Features</p>
+          <ul className="list-inside list-disc space-y-1">
+            <li>Discussion forums and proposal threads</li>
+            <li>Community-driven analytics and dashboards</li>
+            <li>Ambassador and contributor programs</li>
+            <li>Integration with Discord and Telegram</li>
+          </ul>
+        </div>
+      </div>
+    ),
+  },
+  {
+    id: "liquidation",
+    icon: <Shield className="h-4 w-4" />,
+    title: "Liquidation",
+    comingSoon: true,
+    content: (
+      <div className="space-y-4 text-sm text-muted-foreground">
+        <p>ArcLend's liquidation engine ensures protocol solvency by allowing anyone to repay undercollateralized positions and receive a bonus.</p>
+        <div className="rounded-lg border border-border bg-secondary/30 p-4">
+          <p className="font-semibold text-foreground">Planned Features</p>
+          <ul className="list-inside list-disc space-y-1">
+            <li>Public liquidation dashboard with at-risk positions</li>
+            <li>Bot-friendly liquidation API</li>
+            <li>5% liquidation bonus for liquidators</li>
+            <li>Partial and full liquidation support</li>
+          </ul>
+        </div>
+      </div>
+    ),
+  },
+  {
+    id: "governance",
+    icon: <Gavel className="h-4 w-4" />,
+    title: "Governance",
+    comingSoon: true,
+    content: (
+      <div className="space-y-4 text-sm text-muted-foreground">
+        <p>ALND token holders will govern the protocol through on-chain proposals and voting, shaping the future of ArcLend.</p>
+        <div className="rounded-lg border border-border bg-secondary/30 p-4">
+          <p className="font-semibold text-foreground">Planned Features</p>
+          <ul className="list-inside list-disc space-y-1">
+            <li>On-chain proposal creation and voting</li>
+            <li>Token-weighted governance (1 ALND = 1 vote)</li>
+            <li>Parameter adjustment proposals (interest rates, LTV ratios)</li>
+            <li>Treasury management and grant programs</li>
+          </ul>
+        </div>
+      </div>
+    ),
   },
 ];
 
+const resources = [
+  { label: "Base Documentation", url: "https://docs.base.org", desc: "Base chain developer docs" },
+  { label: "Aave V3 Protocol", url: "https://docs.aave.com", desc: "Lending protocol reference" },
+  { label: "Uniswap V2 Docs", url: "https://docs.uniswap.org/contracts/v2/overview", desc: "AMM reference" },
+  { label: "wagmi Documentation", url: "https://wagmi.sh", desc: "React hooks for Ethereum" },
+  { label: "RainbowKit", url: "https://www.rainbowkit.com/docs", desc: "Wallet connection UI" },
+];
+
 export default function Docs() {
+  const [activeSection, setActiveSection] = useState("overview");
+
+  const current = sections.find((s) => s.id === activeSection) || sections[0];
+
   return (
     <DashboardLayout>
-      <div className="mx-auto max-w-4xl">
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <h1 className="mb-2 text-2xl font-bold text-foreground sm:text-3xl">ArcLend Documentation</h1>
-          <p className="text-muted-foreground">
-            Complete guide to deploy and integrate ArcLend on Base Sepolia. All contracts, source code, and step-by-step Remix deployment instructions.
-          </p>
-        </motion.div>
+      <div className="mb-6">
+        <h1 className="text-xl font-bold text-foreground sm:text-2xl">Documentation</h1>
+        <p className="mt-1 text-sm text-muted-foreground">Everything you need to know about ArcLend.</p>
+      </div>
 
-        <Card className="mb-8 border-warning/30 bg-warning/5">
-          <CardContent className="flex items-start gap-3 p-4">
-            <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-warning" />
-            <div className="text-sm">
-              <p className="mb-1 font-semibold text-foreground">Base Sepolia Trial Deployment</p>
-              <p className="text-muted-foreground">
-                Deploy all contracts on Base Sepolia first as a trial. ETH is the only real token — WETH and USDT are protocol-created ERC-20 tokens for testing purposes only. Deploy them using the source code below.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+      <div className="flex flex-col gap-6 lg:flex-row">
+        {/* Sidebar */}
+        <nav className="shrink-0 lg:w-56">
+          <div className="sticky top-4 space-y-1">
+            {sections.map((s) => (
+              <button
+                key={s.id}
+                onClick={() => setActiveSection(s.id)}
+                className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+                  activeSection === s.id
+                    ? "bg-primary/10 font-medium text-primary"
+                    : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                }`}
+              >
+                <span className="text-primary">{s.icon}</span>
+                <span className="flex-1">{s.title}</span>
+                {s.comingSoon && (
+                  <Badge variant="secondary" className="text-[9px] px-1.5 py-0">Soon</Badge>
+                )}
+              </button>
+            ))}
 
-        <Card className="mb-8 border-border bg-card">
-          <CardHeader>
-            <CardTitle className="text-sm text-foreground">Table of Contents</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <nav className="space-y-1">
-              {sections.map((s) => (
+            <div className="mt-6 border-t border-border pt-4">
+              <p className="mb-2 px-3 text-xs font-semibold text-muted-foreground">Resources</p>
+              {resources.map((r) => (
                 <a
-                  key={s.id}
-                  href={`#${s.id}`}
-                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                  key={r.label}
+                  href={r.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
                 >
-                  <s.icon className="h-4 w-4 text-primary" />
-                  {s.title}
+                  <ExternalLink className="h-3 w-3" />
+                  <span>{r.label}</span>
                 </a>
               ))}
-            </nav>
-          </CardContent>
-        </Card>
+            </div>
+          </div>
+        </nav>
 
-        <div className="space-y-6">
-          {sections.map((s) => (
-            <motion.div
-              key={s.id}
-              id={s.id}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.05 }}
-            >
-              <Card className="border-border bg-card">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-base text-foreground">
-                    <s.icon className="h-5 w-5 text-primary" />
-                    {s.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="prose prose-invert max-w-none text-sm leading-relaxed text-muted-foreground">
-                    <FormattedContent content={s.content} />
+        {/* Content */}
+        <div className="min-w-0 flex-1">
+          <motion.div
+            key={current.id}
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Card className="border-border bg-card">
+              <CardContent className="p-6">
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    {current.icon}
                   </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-lg font-bold text-foreground">{current.title}</h2>
+                    {current.comingSoon && (
+                      <Badge variant="outline" className="border-primary/30 text-primary text-xs">
+                        <Clock className="mr-1 h-3 w-3" /> Coming Soon
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+                {current.content}
+              </CardContent>
+            </Card>
+          </motion.div>
         </div>
       </div>
     </DashboardLayout>
   );
-}
-
-function FormattedContent({ content }: { content: string }) {
-  const parts: JSX.Element[] = [];
-  const lines = content.split("\n");
-  let inCode = false;
-  let codeLines: string[] = [];
-
-  lines.forEach((line, i) => {
-    if (line.startsWith("```") && !inCode) {
-      inCode = true;
-      codeLines = [];
-    } else if (line.startsWith("```") && inCode) {
-      inCode = false;
-      parts.push(
-        <pre key={`code-${i}`} className="my-3 overflow-x-auto rounded-lg border border-border bg-secondary/50 p-4 text-xs">
-          <code>{codeLines.join("\n")}</code>
-        </pre>
-      );
-    } else if (inCode) {
-      codeLines.push(line);
-    } else if (line.startsWith("- [")) {
-      const checked = line.includes("[x]");
-      const text = line.replace(/- \[[ x]\] /, "");
-      parts.push(
-        <div key={`check-${i}`} className="flex items-center gap-2 py-0.5">
-          <span className={`inline-block h-3.5 w-3.5 rounded border ${checked ? "border-primary bg-primary" : "border-border"}`} />
-          <span>{text}</span>
-        </div>
-      );
-    } else if (line.startsWith("• ") || line.startsWith("- ")) {
-      parts.push(
-        <div key={`li-${i}`} className="flex gap-2 py-0.5">
-          <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary/50" />
-          <span dangerouslySetInnerHTML={{ __html: formatInline(line.slice(2)) }} />
-        </div>
-      );
-    } else if (line.match(/^\d+\. /)) {
-      const num = line.match(/^(\d+)\. /)?.[1];
-      parts.push(
-        <div key={`ol-${i}`} className="flex gap-2 py-0.5">
-          <span className="shrink-0 text-primary">{num}.</span>
-          <span dangerouslySetInnerHTML={{ __html: formatInline(line.replace(/^\d+\. /, "")) }} />
-        </div>
-      );
-    } else if (line.trim() === "") {
-      parts.push(<div key={`br-${i}`} className="h-2" />);
-    } else {
-      parts.push(<p key={`p-${i}`} className="py-0.5" dangerouslySetInnerHTML={{ __html: formatInline(line) }} />);
-    }
-  });
-
-  return <div>{parts}</div>;
-}
-
-function formatInline(text: string): string {
-  return text
-    .replace(/\*\*(.+?)\*\*/g, '<strong class="text-foreground font-semibold">$1</strong>')
-    .replace(/`([^`]+)`/g, '<code class="rounded bg-secondary px-1.5 py-0.5 text-xs text-primary">$1</code>')
-    .replace(
-      /\[([^\]]+)\]\(([^)]+)\)/g,
-      '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-primary underline underline-offset-2 hover:text-primary/80">$1</a>'
-    );
 }
