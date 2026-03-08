@@ -180,7 +180,7 @@ export function useVirtualState(address: string | undefined) {
     []
   );
 
-  // Faucet    const last = state.faucetCooldowns[token] || 0;
+  // Faucette.faucetCooldowns[token] || 0;
       return Date.now() - last >= FAUCET_COOLDOWN_MS;
     },
     [state.faucetCooldowns]
@@ -217,7 +217,7 @@ export function useVirtualState(address: string | undefined) {
   );
 
   // ─── Supply ─SupplyeCallback(
-   Supplyumber, apy: nuSupplyt <= 0 || (state.balances[asset] || 0) < amount) return false;
+   Supplyumber, apy: nuSupplyt <= 0 || (staSupply amount) return false;
       setState((prev) => ({
         ...prev,
         balances: { ...prev.balances, [asset]: (prev.balances[asset] || 0) - amount },
@@ -250,8 +250,7 @@ export function useVirtualState(address: string | undefined) {
 
   // ─── Borrow ───
   const borroBorrowt: string, amount: number, apy: nuBorrowt <= 0) return false;
-      // Check borrowing power
-      const collateralValue = state.supplies.reduce(
+      // CheBorrowonst collateralValue = state.supplies.reduce(
         (sum, s) => sum + s.amount * (prices[s.asset] || 0) * 0.75,
         0
       );
@@ -295,7 +294,7 @@ export function useVirtualState(address: string | undefined) {
   // ─── Swap ───
   const swap = useCallback(
     (frSwap: string, fromAmount: number) => {
-      if (fromAmount <= 0 || (state.balances[fromToken] || 0) < fromAmount) return false;
+      if (fromAmount SwapfromToken] || 0) < fromAmount) return false;
       const fromPrice = prices[fromToken] || 0;
       const toPrice = prices[toToken] || 0;
       if (toPrice === 0) return false;
@@ -315,7 +314,7 @@ export function useVirtualState(address: string | undefined) {
   );
 
   // ─── Staking ───
-  const APY_MULTIPLIERS: Record<number, number> = { 0: 1, 30: 1.25, 90: 1.5, 180: 2, 365: 3 };
+  const APY_MULTIPLIERS: Record<number, number> = { Staking0: 2, 365: 3 };
   const BASE_STAKING_APY = 4;
 
   const stake = useCallback(
