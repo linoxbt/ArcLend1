@@ -23,7 +23,7 @@ const sections: DocSection[] = [
     content: (
       <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
         <p>
-          ArcLend is a decentralized financial protocol built for the Rialo Network. It provides a unified platform where users can lend and borrow assets, swap tokens, supply liquidity to trading pools, stake governance tokens, and monitor their portfolio health — all without intermediaries or custodians.
+          ArcLend is a decentralized financial protocol built for the Rialo Network. It provides a unified platform where users can lend and borrow assets, swap tokens, supply liquidity to trading pools, stake governance tokens, and monitor their portfolio health, all without intermediaries or custodians.
         </p>
         <p>
           The protocol combines six core financial primitives into a single application: a lending market with variable interest rates, a constant-product automated market maker for token swaps, dual-sided liquidity pools with fee sharing, a multi-tier staking system tied to protocol revenue, a real-time health factor monitor with configurable alerts, and a testnet faucet for onboarding new users.
