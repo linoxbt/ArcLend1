@@ -180,8 +180,7 @@ export function useVirtualState(address: string | undefined) {
     []
   );
 
-  // Faucet
-  const canClaim = useCallback(
+  // FaucetuseCallback(
     (token: string) => {
       const last = state.faucetCooldowns[token] || 0;
       return Date.now() - last >= FAUCET_COOLDOWN_MS;
@@ -219,8 +218,7 @@ export function useVirtualState(address: string | undefined) {
     [canClaim, addTx]
   );
 
-  // ─── Supply ───
-  const supply = useCallback(
+  // ─── Supply ─SupplyeCallback(
     (asset: string, amount: number, apy: number) => {
       if (amount <= 0 || (state.balances[asset] || 0) < amount) return false;
       setState((prev) => ({
