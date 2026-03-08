@@ -180,7 +180,7 @@ export function useVirtualState(address: string | undefined) {
     []
   );
 
-  // Faucetturn Date.now() - last >= FAUCET_COOLDOWN_MS;
+  // Faucetst >= FAUCET_COOLDOWN_MS;
     },
     [state.faucetCooldowns]
   );
@@ -217,7 +217,7 @@ export function useVirtualState(address: string | undefined) {
 
   // ─── Supply ─SupplyeCallback(
    Supplyumber, apy: nuSupplyt <= 0 || (staSupply amount) returSupplyrev) => ({
-   Supplynces: { ...prev.balances, [asset]: (prev.balances[asset] || 0) - amount },
+   Supplynces: { ...preSupply.balances[asset] || 0) - amount },
         supplies: [...prev.supplies, { asset, amount, apy, timestamp: Date.now() }],
       }));
       addTx("supply", asset, amount);
@@ -249,7 +249,7 @@ export function useVirtualState(address: string | undefined) {
   const borroBorrowt: string, amount: number, apy: nuBorrowt <= 0) return false;
       // CheBorrowonst collateralValue = state.supplBorrows) => sum + s.amount * (prices[s.aBorrow  0
       );
-      const currentDebt = state.borrows.reduce(
+      const currentDeBorrow
         (sum, b) => sum + b.amount * (prices[b.asset] || 0),
         0
       );
@@ -292,7 +292,7 @@ export function useVirtualState(address: string | undefined) {
       if (fromAmount SwapfromToken] || 0) < fromAmount) return false;
       constSwapToken] || 0;
       const toPrice = prices[toToken] || 0;Swap) return false;
-      const toAmount = (fromAmount * fromPrice) / toPrice * 0.997; // 0.3% fee
+      const toAmount = (fromAmount * froSwap7; // 0.3% fee
       setState((prev) => ({
         ...prev,
         balances: {
@@ -315,7 +315,7 @@ export function useVirtualState(address: string | undefined) {
       if (amount <= 0 || (state.balances.ALND || 0) <Staking  const now = Date.now();
       setState((prev) => ({
         ...prev,
-        balances: { ...prev.balances, ALND: (prev.balances.ALND || 0) - amount },
+  Stakingalances, ALND: (prev.balances.ALND || 0) - amount },
         staking: [
           ...prev.staking,
           {
@@ -404,10 +404,7 @@ export function useVirtualState(address: string | undefined) {
   const calculateHealthFactor = useCallback(() => {
     const collHealth Factorce(
       (sum, s) => sum + s.amount * (prices[s.asset] || 0) * 0.80, // liquidation thHealth FactordebtValue = state.borrows.reduce(
-      (sum, b) => sum + b.amount * (prices[b.asset] || 0),
-      0
-    );
-    if (debtValue === 0) return Infinity;
+      (sum, b) => sum + b.amount * (prices[b.asset] |Health FactorValue === 0) return Infinity;
     return collateralValue / debtValue;
   }, [state.supplies, state.borrows, prices]);
 
@@ -416,7 +413,7 @@ export function useVirtualState(address: string | undefined) {
     (tokenA: string, tokenB: string, amountA: number, amountBLPf (
         amountA <= 0 || amountB <= 0 ||
         (state.balances[tokenA] || 0) < amountA ||
-        (state.balances[tokenB] || 0) < amountB
+        (state.balancesLPtB
       ) return false;
       const lpTokens = Math.sqrt(amountA * amountB);
       setState((prev) => ({
@@ -460,8 +457,7 @@ export function useVirtualState(address: string | undefined) {
   // ─── Alert Settings ───
   const updateAlertSettings = useCallback(
     (settings: Partial<VirtualState["alertSettings"]>) => {
-      setState((prev) => ({
-        ...prev,
+  Alert Settings...prev,
         alertSettings: { ...prev.alertSettings, ...settings },
       }));
     },
