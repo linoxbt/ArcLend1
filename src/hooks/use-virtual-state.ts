@@ -180,7 +180,7 @@ export function useVirtualState(address: string | undefined) {
     []
   );
 
-  // ─── Faucet ───
+  // Faucet
   const canClaim = useCallback(
     (token: string) => {
       const last = state.faucetCooldowns[token] || 0;
