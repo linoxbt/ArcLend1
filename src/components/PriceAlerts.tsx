@@ -240,16 +240,16 @@ export function PriceAlerts({ prices, walletAddress }: PriceAlertsProps) {
               key={alert.id}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="flex items-center justify-between rounded-lg bg-success/10 border border-success/20 p-3"
+              className="flex items-center justify-between rounded-lg bg-primary/10 border border-primary/20 p-3"
             >
               <div className="flex items-center gap-2">
-                <BellRing className="h-4 w-4 text-green-500" />
+                <BellRing className="h-4 w-4 text-primary" />
                 <div>
                   <p className="text-xs font-medium text-foreground">
                     {alert.token} {alert.condition === "above" ? "↑" : "↓"} $
                     {alert.targetPrice.toFixed(2)}
                   </p>
-                  <p className="text-[10px] text-green-500">{t("alertTriggered")}</p>
+                  <p className="text-[10px] text-primary">{t("alertTriggered")}</p>
                 </div>
               </div>
               <Button
