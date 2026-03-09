@@ -62,6 +62,7 @@ const App = () => {
             <Route path="/analytics" element={<Analytics />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <OnboardingTour />
         </BrowserRouter>
       </TooltipProvider>
     </Web3Provider>
