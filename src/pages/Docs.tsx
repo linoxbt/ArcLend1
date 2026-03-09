@@ -251,7 +251,7 @@ const sections: DocSection[] = [
           <div>
             <p className="font-semibold text-foreground">Adding Liquidity</p>
             <p>
-              You deposit two tokens in equal dollar value. For example, $500 of RIA and $500 of USDT into the RIA/USDT pool. In return, you receive LP tokens representing your proportional share of the pool. As trades flow through the pool, fees accumulate and increase the value of your LP tokens.
+              You deposit two tokens in equal dollar value. For example, $500 of RLO and $500 of USDT into the RLO/USDT pool. In return, you receive LP tokens representing your proportional share of the pool. As trades flow through the pool, fees accumulate and increase the value of your LP tokens.
             </p>
           </div>
           <div>
