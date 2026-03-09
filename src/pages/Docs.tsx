@@ -231,7 +231,7 @@ const sections: DocSection[] = [
           <div>
             <p className="font-semibold text-foreground">Why Swap Inside ArcLend?</p>
             <p>
-              Having swaps within the protocol means users do not need to leave the platform to rebalance their portfolio. Need more USDT to repay a borrow position? Swap RIA for USDT and repay, all in one session. This composability between swap, lending, and staking reduces friction and keeps capital circulating within the ecosystem.
+              Having swaps within the protocol means users do not need to leave the platform to rebalance their portfolio. Need more USDT to repay a borrow position? Swap RLO for USDT and repay, all in one session. This composability between swap, lending, and staking reduces friction and keeps capital circulating within the ecosystem.
             </p>
           </div>
         </div>
