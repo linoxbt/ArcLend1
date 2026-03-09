@@ -60,7 +60,7 @@ const sections: DocSection[] = [
           The common workaround is forking an existing protocol and deploying it on the new chain. This rarely works well. Forked protocols arrive with assumptions about oracle infrastructure, governance participation, and liquidity depth that simply do not exist on a young network. The fork launches, attracts minimal liquidity, and stagnates because it was never designed to grow with the ecosystem it landed on.
         </p>
         <p>
-          Rialo Network faces this exact situation. It is a high-throughput, low-fee chain with a growing developer community, but it lacks a native DeFi layer that can serve as the foundation for financial applications. Users who hold RIA have no way to earn yield on it. Builders who want to integrate lending or swaps into their applications have no on-chain primitives to call.
+          Rialo Network faces this exact situation. It is a high-throughput, low-fee chain with a growing developer community, but it lacks a native DeFi layer that can serve as the foundation for financial applications. Users who hold RLO have no way to earn yield on it. Builders who want to integrate lending or swaps into their applications have no on-chain primitives to call.
         </p>
         <p>
           ArcLend exists to fill that gap, not as a fork dropped onto Rialo, but as a purpose-built protocol designed for the chain's fee structure, community, and roadmap. The goal is to be the first financial layer that makes Rialo a chain where capital is productive from day one.
