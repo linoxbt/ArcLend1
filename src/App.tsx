@@ -43,7 +43,6 @@ const App = () => {
         <Toaster />
         <Sonner />
         <AIChatBot />
-        <OnboardingTour />
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
