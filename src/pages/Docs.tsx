@@ -469,9 +469,9 @@ const sections: DocSection[] = [
             <p className="font-semibold text-foreground">Why Rialo</p>
             <p>Low fees make DeFi interactions economically viable for all users, not just large holders. On high-fee chains, a small borrow or swap can cost more in gas than the transaction is worth. On Rialo, every interaction, from a $10 swap to a $100,000 supply, has a negligible transaction cost.</p>
           </div>
-          <div>
-            <p className="font-semibold text-foreground">RIA Token</p>
-            <p>RIA is Rialo's native gas token. On ArcLend, it is also accepted as collateral in lending pools, used as a base pair for swaps, and distributed through the testnet faucet.</p>
+           <div>
+             <p className="font-semibold text-foreground">RLO Token</p>
+             <p>RLO is Rialo's native gas token. On ArcLend, it is also accepted as collateral in lending pools, used as a base pair for swaps, and distributed through the testnet faucet.</p>
           </div>
           <div>
             <p className="font-semibold text-foreground">Connecting to Rialo Testnet</p>
