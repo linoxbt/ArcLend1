@@ -482,6 +482,71 @@ const sections: DocSection[] = [
     ),
   },
   {
+    id: "techstack",
+    icon: <Code2 className="h-4 w-4" />,
+    title: "Technology Stack",
+    content: (
+      <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
+        <p>
+          ArcLend is built with a modern, production-grade technology stack optimized for performance, developer experience, and Web3 integration.
+        </p>
+        <div className="rounded-lg border border-border bg-secondary/30 p-4 space-y-3">
+          <div>
+            <p className="font-semibold text-foreground">Frontend Framework</p>
+            <p><strong className="text-foreground">React 18</strong> with <strong className="text-foreground">TypeScript</strong> — component-based architecture with full type safety. Vite serves as the build tool for instant HMR and optimized production bundles.</p>
+          </div>
+          <div>
+            <p className="font-semibold text-foreground">Styling & UI</p>
+            <p><strong className="text-foreground">Tailwind CSS</strong> for utility-first styling with a custom design system. <strong className="text-foreground">shadcn/ui</strong> provides accessible, composable primitives built on Radix UI. <strong className="text-foreground">Framer Motion</strong> powers all animations and transitions.</p>
+          </div>
+          <div>
+            <p className="font-semibold text-foreground">Web3 Integration</p>
+            <p><strong className="text-foreground">wagmi</strong> and <strong className="text-foreground">viem</strong> for type-safe Ethereum interactions. <strong className="text-foreground">RainbowKit</strong> provides a polished wallet connection UI supporting MetaMask, WalletConnect, and other popular wallets.</p>
+          </div>
+          <div>
+            <p className="font-semibold text-foreground">Backend & Data</p>
+            <p><strong className="text-foreground">Supabase</strong> (via Lovable Cloud) handles database persistence, edge functions for notification dispatch (email & Telegram), and real-time subscriptions. <strong className="text-foreground">TanStack Query</strong> manages server state with caching and automatic refetching.</p>
+          </div>
+          <div>
+            <p className="font-semibold text-foreground">Data Visualization</p>
+            <p><strong className="text-foreground">Recharts</strong> for portfolio analytics, yield curves, and P&L charts. Built on D3.js with a React-native API for responsive, interactive charting.</p>
+          </div>
+          <div>
+            <p className="font-semibold text-foreground">Internationalization</p>
+            <p><strong className="text-foreground">i18next</strong> with <strong className="text-foreground">react-i18next</strong> for multi-language support. Currently supports English, Spanish, Chinese, and Arabic with browser-based language detection.</p>
+          </div>
+          <div>
+            <p className="font-semibold text-foreground">Routing & State</p>
+            <p><strong className="text-foreground">React Router v6</strong> for client-side navigation. Local state is persisted to <strong className="text-foreground">localStorage</strong> per wallet address for virtual simulation state. Database-backed state for alerts and notification preferences.</p>
+          </div>
+          <div>
+            <p className="font-semibold text-foreground">Testing & Quality</p>
+            <p><strong className="text-foreground">Vitest</strong> for unit and integration testing. <strong className="text-foreground">ESLint</strong> with TypeScript rules for code quality enforcement. Fully typed with strict TypeScript configuration.</p>
+          </div>
+        </div>
+        <div className="rounded-lg border border-border bg-secondary/30 p-4 space-y-2">
+          <p className="font-semibold text-foreground">Key Libraries</p>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
+            <p>• React 18 + TypeScript</p>
+            <p>• Vite (build tool)</p>
+            <p>• Tailwind CSS</p>
+            <p>• shadcn/ui + Radix UI</p>
+            <p>• Framer Motion</p>
+            <p>• wagmi + viem</p>
+            <p>• RainbowKit</p>
+            <p>• Supabase JS</p>
+            <p>• TanStack Query</p>
+            <p>• Recharts</p>
+            <p>• i18next</p>
+            <p>• React Router v6</p>
+            <p>• Zod (validation)</p>
+            <p>• Sonner (toasts)</p>
+          </div>
+        </div>
+      </div>
+    ),
+  },
+  {
     id: "glossary",
     icon: <HelpCircle className="h-4 w-4" />,
     title: "Glossary",
