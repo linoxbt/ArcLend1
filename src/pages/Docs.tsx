@@ -412,7 +412,7 @@ const sections: DocSection[] = [
           <div>
             <p className="font-semibold text-foreground">Claim Amounts</p>
             <ul className="list-inside list-disc space-y-1">
-              <li>RIA: 100 tokens per claim</li>
+              <li>RLO: 100 tokens per claim</li>
               <li>WETH: 1 token per claim</li>
               <li>USDT: 1,000 tokens per claim</li>
               <li>ALND: 100 tokens per claim</li>
