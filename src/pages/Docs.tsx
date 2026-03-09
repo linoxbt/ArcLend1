@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import {
   BookOpen, BarChart3, ArrowLeftRight, Droplets, Coins, Shield, Rocket,
   Activity, Users, Gavel, Lock, ExternalLink, Target, Eye, Lightbulb,
-  Layers, HelpCircle, Wallet, Globe
+  Layers, HelpCircle, Wallet, Globe, Code2
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { DashboardLayout } from "@/components/DashboardLayout";
