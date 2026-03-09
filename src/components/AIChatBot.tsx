@@ -138,7 +138,7 @@ export function AIChatBot() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             exit={{ scale: 0 }}
-            className="fixed bottom-6 right-6 z-50"
+            className="fixed bottom-20 right-6 z-50 md:bottom-6"
           >
             <Button
               size="icon"
