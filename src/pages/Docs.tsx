@@ -336,8 +336,8 @@ const sections: DocSection[] = [
         <div className="rounded-lg border border-border bg-secondary/30 p-4 space-y-3">
           <div>
             <p className="font-semibold text-foreground">Calculation</p>
-            <p>Health Factor = (Total Collateral Value x Liquidation Threshold) / Total Debt Value</p>
-            <p className="mt-2">Example: $1,000 of RIA supplied (80% liquidation threshold) and $400 of USDT borrowed gives HF = ($1,000 x 0.80) / $400 = 2.0. That is a comfortable position.</p>
+             <p>Health Factor = (Total Collateral Value x Liquidation Threshold) / Total Debt Value</p>
+             <p className="mt-2">Example: $1,000 of RLO supplied (80% liquidation threshold) and $400 of USDT borrowed gives HF = ($1,000 x 0.80) / $400 = 2.0. That is a comfortable position.</p>
           </div>
           <div>
             <p className="font-semibold text-foreground">Risk Levels</p>
