@@ -46,7 +46,7 @@ export default function DeployGuide() {
 
   const openDeploy = (template: ContractTemplate) => {
     if (!connected) {
-      toast({ title: "Connect wallet first", description: "Connect your wallet to Rialo Network to deploy contracts.", variant: "destructive" });
+      toast({ title: "Connect wallet first", description: "Connect your wallet to deploy contracts on Rialo Network.", variant: "destructive" });
       return;
     }
     setSelectedTemplate(template);
