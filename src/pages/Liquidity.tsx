@@ -4,9 +4,7 @@ import { Wallet, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { useWalletState, WalletButton } from "@/components/WalletButton";
 import { useToast } from "@/hooks/use-toast";
@@ -26,7 +24,7 @@ const pools: Pool[] = [
   { tokenA: "RLO", tokenB: "USDT", tvl: "$245,000", volume24h: "$12,500", apr: "24.5%" },
   { tokenA: "RLO", tokenB: "WETH", tvl: "$180,000", volume24h: "$8,200", apr: "18.2%" },
   { tokenA: "USDT", tokenB: "WETH", tvl: "$320,000", volume24h: "$15,800", apr: "15.8%" },
-  { tokenA: "ALND", tokenB: "USDT", tvl: "$95,000", volume24h: "$4,200", apr: "32.1%" },
+  { tokenA: "STL", tokenB: "USDT", tvl: "$95,000", volume24h: "$4,200", apr: "32.1%" },
 ];
 
 export default function Liquidity() {
@@ -85,7 +83,6 @@ export default function Liquidity() {
         <p className="mt-1 text-sm text-muted-foreground">Provide liquidity to earn swap fees on Rialo Network</p>
       </div>
 
-      {/* Stats */}
       <div className="mb-6 grid gap-4 grid-cols-3">
         {[
           { label: "Total TVL", value: "$840,000" },
@@ -101,7 +98,6 @@ export default function Liquidity() {
         ))}
       </div>
 
-      {/* Pools - vertical list */}
       <div className="space-y-3 mb-6">
         {pools.map((pool, i) => (
           <Card key={i} className="border-border bg-card hover:border-primary/30 transition-all">
@@ -122,7 +118,6 @@ export default function Liquidity() {
         ))}
       </div>
 
-      {/* User LP positions */}
       {vs.state.lpPositions.length > 0 && (
         <Card className="border-border bg-card">
           <CardHeader><CardTitle className="text-sm text-foreground">Your LP Positions</CardTitle></CardHeader>
@@ -146,7 +141,6 @@ export default function Liquidity() {
         </Card>
       )}
 
-      {/* Add Dialog */}
       <Dialog open={addOpen} onOpenChange={setAddOpen}>
         <DialogContent className="border-border bg-card">
           <DialogHeader>

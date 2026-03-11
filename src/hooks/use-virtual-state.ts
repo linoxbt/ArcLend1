@@ -5,21 +5,21 @@ export const BASE_PRICES: Record<string, number> = {
   RLO: 0.50,
   WETH: 2000,
   USDT: 1.0,
-  ALND: 10,
+  STL: 10,
 };
 
 export const INITIAL_BALANCES: Record<string, number> = {
   RLO: 100,
   WETH: 0,
   USDT: 0,
-  ALND: 0,
+  STL: 0,
 };
 
 export const FAUCET_AMOUNTS: Record<string, number> = {
   RLO: 100,
   WETH: 1,
   USDT: 1000,
-  ALND: 100,
+  STL: 100,
 };
 
 export const FAUCET_COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24h
@@ -104,12 +104,16 @@ const DEFAULT_STATE: VirtualState = {
 };
 
 function getKey(address: string) {
-  return `arclend_virtual_${address.toLowerCase()}`;
+  return `stelo_virtual_${address.toLowerCase()}`;
 }
 
 function loadState(address: string): VirtualState {
   try {
-    const raw = localStorage.getItem(getKey(address));
+    // Try new key first, fallback to old key for migration
+    let raw = localStorage.getItem(getKey(address));
+    if (!raw) {
+      raw = localStorage.getItem(`arclend_virtual_${address.toLowerCase()}`);
+    }
     if (raw) return JSON.parse(raw);
   } catch {}
   return { ...DEFAULT_STATE, balances: { ...INITIAL_BALANCES } };
@@ -325,11 +329,11 @@ export function useVirtualState(address: string | undefined) {
 
   const stake = useCallback(
     (amount: number, lockDays: number) => {
-      if (amount <= 0 || (state.balances.ALND || 0) < amount) return false;
+      if (amount <= 0 || (state.balances.STL || 0) < amount) return false;
       const now = Date.now();
       setState((prev) => ({
         ...prev,
-        balances: { ...prev.balances, ALND: (prev.balances.ALND || 0) - amount },
+        balances: { ...prev.balances, STL: (prev.balances.STL || 0) - amount },
         staking: [
           ...prev.staking,
           {
@@ -342,7 +346,7 @@ export function useVirtualState(address: string | undefined) {
           },
         ],
       }));
-      addTx("stake", "ALND", amount);
+      addTx("stake", "STL", amount);
       return true;
     },
     [state.balances, addTx]
@@ -363,7 +367,7 @@ export function useVirtualState(address: string | undefined) {
           { amount: pos.amount, availableAt },
         ],
       }));
-      addTx("unstake", "ALND", pos.amount);
+      addTx("unstake", "STL", pos.amount);
       return true;
     },
     [state.staking, addTx]
@@ -377,7 +381,7 @@ export function useVirtualState(address: string | undefined) {
     const total = ready.reduce((s, w) => s + w.amount, 0);
     setState((prev) => ({
       ...prev,
-      balances: { ...prev.balances, ALND: (prev.balances.ALND || 0) + total },
+      balances: { ...prev.balances, STL: (prev.balances.STL || 0) + total },
       stakingPendingWithdrawals: notReady,
     }));
     return true;
@@ -401,14 +405,14 @@ export function useVirtualState(address: string | undefined) {
       if (rewards <= 0) return 0;
       setState((prev) => ({
         ...prev,
-        balances: { ...prev.balances, ALND: (prev.balances.ALND || 0) + rewards },
+        balances: { ...prev.balances, STL: (prev.balances.STL || 0) + rewards },
         staking: prev.staking.map((p, i) =>
           i === index
             ? { ...p, claimedRewards: p.claimedRewards + rewards, lastClaimTime: Date.now() }
             : p
         ),
       }));
-      addTx("claim_rewards", "ALND", rewards);
+      addTx("claim_rewards", "STL", rewards);
       return rewards;
     },
     [state.staking, getStakingRewards, addTx]
@@ -501,12 +505,10 @@ export function useVirtualState(address: string | undefined) {
     claimPendingWithdrawals,
     getStakingRewards,
     claimStakingRewards,
-    stakingAPY: BASE_STAKING_APY,
-    apyMultipliers: APY_MULTIPLIERS,
     calculateHealthFactor,
     addLiquidity,
     removeLiquidity,
     updateAlertSettings,
-    addTx,
+    apyMultipliers: APY_MULTIPLIERS,
   };
 }

@@ -14,7 +14,7 @@ const faucetTokens = [
   { symbol: "RLO", name: "Rialo", description: "Native gas & utility token" },
   { symbol: "WETH", name: "Wrapped Ether", description: "Wrapped version of Ethereum" },
   { symbol: "USDT", name: "Tether USD", description: "Stablecoin pegged to USD" },
-  { symbol: "ALND", name: "ArcLend Token", description: "Governance & staking token" },
+  { symbol: "STL", name: "Stelo Token", description: "Governance & staking token" },
 ];
 
 function formatCountdown(ms: number): string {
@@ -34,7 +34,6 @@ export default function Faucet() {
   const [claimingAll, setClaimingAll] = useState(false);
   const [, setTick] = useState(0);
 
-  // Update cooldown timers every second
   useEffect(() => {
     const interval = setInterval(() => setTick((t) => t + 1), 1000);
     return () => clearInterval(interval);
@@ -78,7 +77,7 @@ export default function Faucet() {
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
           <div className="mb-6">
             <h1 className="text-xl font-bold text-foreground sm:text-2xl">Testnet Faucet</h1>
-            <p className="mt-1 text-sm text-muted-foreground">Claim free testnet tokens to try out ArcLend. Each token can be claimed once every 24 hours.</p>
+            <p className="mt-1 text-sm text-muted-foreground">Claim free testnet tokens to try out Stelo. Each token can be claimed once every 24 hours.</p>
           </div>
 
           {!connected && (
@@ -91,14 +90,12 @@ export default function Faucet() {
             </Card>
           )}
 
-          {/* Claim All */}
           {connected && (
             <Button className="mb-6 w-full glow-purple" disabled={claimingAll || !anyClaimable} onClick={handleClaimAll}>
               {claimingAll ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Claiming All...</> : <><Coins className="mr-2 h-4 w-4" /> Claim All Tokens</>}
             </Button>
           )}
 
-          {/* Vertical token list */}
           <div className="space-y-3">
             {faucetTokens.map((token) => {
               const claimable = vs.canClaim(token.symbol);
@@ -140,7 +137,6 @@ export default function Faucet() {
             })}
           </div>
 
-          {/* How to use */}
           <Card className="mt-6 border-border bg-card">
             <CardContent className="p-4">
               <p className="mb-3 text-sm font-semibold text-foreground">How to use the faucet</p>
@@ -149,7 +145,7 @@ export default function Faucet() {
                   "Connect your wallet to Rialo Testnet",
                   "Click \"Claim\" on each token or use \"Claim All Tokens\"",
                   "Tokens are added to your virtual balance instantly",
-                  "Start using ArcLend to supply, borrow, swap, and stake!",
+                  "Start using Stelo to supply, borrow, swap, and stake!",
                 ].map((step, i) => (
                   <div key={i} className="flex items-start gap-3 text-xs text-muted-foreground">
                     <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">{i + 1}</span>

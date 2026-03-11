@@ -6,7 +6,7 @@ export function LoadingSplash() {
     <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background">
       <motion.img
         src={logo}
-        alt="ArcLend"
+        alt="Stelo"
         className="h-16 w-16 mb-6"
         initial={{ scale: 0.7, opacity: 0 }}
         animate={{ scale: [0.7, 1.1, 1], opacity: 1 }}
@@ -18,7 +18,7 @@ export function LoadingSplash() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
       >
-        ArcLend
+        Stelo
       </motion.h1>
       <motion.div
         className="flex gap-1.5"

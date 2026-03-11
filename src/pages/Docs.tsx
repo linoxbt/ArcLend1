@@ -19,7 +19,7 @@ const sections: DocSection[] = [
   {
     id: "overview",
     icon: <BookOpen className="h-4 w-4" />,
-    title: "What is ArcLend",
+    title: "What is Stelo",
     content: (
       <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
         <p>

@@ -12,7 +12,7 @@ const features = [
   { icon: BarChart3, title: "Lending & Borrowing", desc: "Supply assets to earn yield or borrow against your collateral with dynamic interest rates." },
   { icon: ArrowLeftRight, title: "Token Swap", desc: "Swap tokens instantly with minimal slippage powered by AMM liquidity pools." },
   { icon: Droplets, title: "Liquidity Pools", desc: "Provide liquidity to earn 0.3% trading fees on every swap." },
-  { icon: Coins, title: "Staking", desc: "Stake ALND to earn rewards with flexible or locked staking periods." },
+  { icon: Coins, title: "Staking", desc: "Stake STL to earn rewards with flexible or locked staking periods." },
   { icon: Shield, title: "Health Monitoring", desc: "Track your health factor and set up alerts to stay ahead of liquidation." },
   { icon: Zap, title: "Testnet Faucet", desc: "Claim free testnet tokens to start exploring the protocol." },
 ];
@@ -26,8 +26,8 @@ export default function Landing() {
       <nav className="border-b border-border/50 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
           <Link to="/" className="flex items-center gap-3">
-            <img src={logo} alt="ArcLend" className="h-8 w-8" />
-            <span className="text-lg font-bold text-foreground">ArcLend</span>
+            <img src={logo} alt="Stelo" className="h-8 w-8" />
+            <span className="text-lg font-bold text-foreground">Stelo</span>
           </Link>
           <div className="hidden items-center gap-6 md:flex">
             <button onClick={() => navigate("/markets")} className="text-sm text-muted-foreground hover:text-foreground">Markets</button>
