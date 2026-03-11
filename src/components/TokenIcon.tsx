@@ -4,7 +4,7 @@ const TOKEN_IMAGES: Record<string, string> = {
   RLO: "/assets/tokens/rlo.png",
   WETH: "/assets/tokens/weth.png",
   USDT: "/assets/tokens/usdt.png",
-  ALND: "/assets/tokens/alnd.png",
+  STL: "/assets/tokens/stl.png",
 };
 
 export function TokenIcon({ symbol, size = "md" }: { symbol: string; size?: "sm" | "md" | "lg" }) {

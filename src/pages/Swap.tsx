@@ -17,7 +17,7 @@ const tokens = [
   { symbol: "RLO", name: "Rialo" },
   { symbol: "WETH", name: "Wrapped Ether" },
   { symbol: "USDT", name: "Tether USD" },
-  { symbol: "ALND", name: "ArcLend Token" },
+  { symbol: "STL", name: "Stelo Token" },
 ];
 
 export default function Swap() {

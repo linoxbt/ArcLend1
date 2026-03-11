@@ -4,12 +4,12 @@ import { X, ArrowRight, ArrowLeft, Wallet, BarChart3, Coins, Shield, Droplets, Z
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
-const TOUR_KEY = "arclend_onboarding_done";
+const TOUR_KEY = "stelo_onboarding_done";
 
 const steps = [
   {
     icon: Wallet,
-    title: "Welcome to ArcLend",
+    title: "Welcome to Stelo",
     description: "Your all-in-one DeFi protocol on Rialo Network. Let's take a quick tour of the key features.",
   },
   {
