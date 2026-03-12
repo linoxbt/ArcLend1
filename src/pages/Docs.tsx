@@ -23,25 +23,24 @@ const sections: DocSection[] = [
     content: (
       <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
         <p>
-          ArcLend is a decentralized financial protocol built for the Rialo Network. It provides a unified platform where users can lend and borrow assets, swap tokens, supply liquidity to trading pools, stake governance tokens, and monitor their portfolio health, all without intermediaries or custodians.
+          Stelo is a decentralized financial protocol built for the Rialo Network. It provides a unified platform where users can lend and borrow assets, swap tokens, supply liquidity to trading pools, stake governance tokens, and monitor their portfolio health, all without intermediaries or custodians.
         </p>
         <p>
           The protocol combines six core financial primitives into a single application: a lending market with variable interest rates, a constant-product automated market maker for token swaps, dual-sided liquidity pools with fee sharing, a multi-tier staking system tied to protocol revenue, a real-time health factor monitor with configurable alerts, and a testnet faucet for onboarding new users.
         </p>
         <p>
-          ArcLend borrows its lending mechanics from the well-established patterns of Aave: utilization-driven interest rates, over-collateralized borrowing, and a transparent liquidation framework. It extends the scope to include swap, liquidity, and staking features that make it a self-contained DeFi layer for Rialo.
+          Stelo borrows its lending mechanics from the well-established patterns of Aave: utilization-driven interest rates, over-collateralized borrowing, and a transparent liquidation framework. It extends the scope to include swap, liquidity, and staking features that make it a self-contained DeFi layer for Rialo.
         </p>
         <p>
           The protocol currently runs on <strong className="text-foreground">Rialo Testnet</strong>. Wallet connection is real, but all subsequent transactions (supply, borrow, swap, stake, claim) execute in a virtual simulation. This allows the Rialo community to experience the full protocol before mainnet deployment, without risking real funds.
         </p>
-
         <div className="rounded-lg border border-border bg-secondary/30 p-4 space-y-2">
           <p className="font-semibold text-foreground">Supported Assets</p>
           <div className="space-y-1.5">
             <p><strong className="text-foreground">RLO</strong>: Rialo's native gas and utility token. Accepted as collateral, used for swap pairs, and distributed through the testnet faucet.</p>
             <p><strong className="text-foreground">WETH</strong>: Wrapped Ether. A tokenized version of ETH conforming to the ERC-20 standard. Widely used as a trading pair and high-value collateral asset.</p>
             <p><strong className="text-foreground">USDT</strong>: Tether USD. A fiat-backed stablecoin pegged to the US dollar. Provides a stable unit of account for lending, borrowing, swaps, and liquidity provision.</p>
-            <p><strong className="text-foreground">ALND</strong>: ArcLend's governance and staking token. Holders stake ALND to earn a share of protocol revenue and vote on proposals that shape the protocol's direction.</p>
+            <p><strong className="text-foreground">STL</strong>: Stelo's governance and staking token. Holders stake STL to earn a share of protocol revenue and vote on proposals that shape the protocol's direction.</p>
           </div>
         </div>
       </div>
@@ -63,7 +62,7 @@ const sections: DocSection[] = [
           Rialo Network faces this exact situation. It is a high-throughput, low-fee chain with a growing developer community, but it lacks a native DeFi layer that can serve as the foundation for financial applications. Users who hold RLO have no way to earn yield on it. Builders who want to integrate lending or swaps into their applications have no on-chain primitives to call.
         </p>
         <p>
-          ArcLend exists to fill that gap, not as a fork dropped onto Rialo, but as a purpose-built protocol designed for the chain's fee structure, community, and roadmap. The goal is to be the first financial layer that makes Rialo a chain where capital is productive from day one.
+          Stelo exists to fill that gap, not as a fork dropped onto Rialo, but as a purpose-built protocol designed for the chain's fee structure, community, and roadmap. The goal is to be the first financial layer that makes Rialo a chain where capital is productive from day one.
         </p>
       </div>
     ),
@@ -78,10 +77,10 @@ const sections: DocSection[] = [
           <strong className="text-foreground">Mission:</strong> To build reliable, transparent, and community-governed financial infrastructure on Rialo Network, enabling anyone to lend, borrow, swap, provide liquidity, and stake without intermediaries.
         </p>
         <p>
-          <strong className="text-foreground">Vision:</strong> ArcLend will become the primary liquidity layer on Rialo. When users want to put capital to work, when builders need on-chain financial primitives, when institutions evaluate the chain's DeFi maturity, ArcLend is where they go.
+          <strong className="text-foreground">Vision:</strong> Stelo will become the primary liquidity layer on Rialo. When users want to put capital to work, when builders need on-chain financial primitives, when institutions evaluate the chain's DeFi maturity, Stelo is where they go.
         </p>
         <p>
-          The protocol is designed to grow alongside Rialo. As the network attracts more users, applications, and capital, ArcLend deepens the liquidity that makes those applications viable. More activity generates more protocol revenue, which flows to stakers, which attracts more ALND holders, which strengthens governance: a compounding cycle.
+          The protocol is designed to grow alongside Rialo. As the network attracts more users, applications, and capital, Stelo deepens the liquidity that makes those applications viable. More activity generates more protocol revenue, which flows to stakers, which attracts more STL holders, which strengthens governance: a compounding cycle.
         </p>
         <p>
           Long-term, the roadmap extends beyond the current feature set. Fixed-rate lending, under-collateralized institutional credit with on-chain scoring, cross-chain liquidity bridges, and structured yield products are all on the horizon. But the foundation comes first: a multi-feature protocol that works reliably, is governed transparently, and earns trust through consistent operation.
@@ -96,7 +95,7 @@ const sections: DocSection[] = [
     content: (
       <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
         <p>
-          A protocol survives long-term only if its revenue model is tied to real usage, not token emissions or hype cycles. ArcLend generates revenue from three sources:
+          A protocol survives long-term only if its revenue model is tied to real usage, not token emissions or hype cycles. Stelo generates revenue from three sources:
         </p>
         <div className="rounded-lg border border-border bg-secondary/30 p-4 space-y-3">
           <div>
@@ -113,10 +112,10 @@ const sections: DocSection[] = [
           </div>
         </div>
         <p>
-          These three revenue streams fund protocol development (engineering, security audits, infrastructure), staking rewards for ALND holders, and a community grants program for builders creating tools on Rialo.
+          These three revenue streams fund protocol development (engineering, security audits, infrastructure), staking rewards for STL holders, and a community grants program for builders creating tools on Rialo.
         </p>
         <p>
-          Because revenue is tied to actual protocol usage (borrowing, swapping, and liquidations) the model remains sustainable regardless of market sentiment. There is no reliance on inflationary token emissions. Governance controls how treasury funds are allocated: ALND stakers vote on reserve factors, fee structures, and spending priorities.
+          Because revenue is tied to actual protocol usage (borrowing, swapping, and liquidations) the model remains sustainable regardless of market sentiment. There is no reliance on inflationary token emissions. Governance controls how treasury funds are allocated: STL stakers vote on reserve factors, fee structures, and spending priorities.
         </p>
       </div>
     ),
@@ -128,7 +127,7 @@ const sections: DocSection[] = [
     content: (
       <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
         <p>
-          ArcLend is structured as a set of modular smart contracts deployed on Rialo Network. Each module handles a distinct function and can be upgraded independently through governance.
+          Stelo is structured as a set of modular smart contracts deployed on Rialo Network. Each module handles a distinct function and can be upgraded independently through governance.
         </p>
         <div className="rounded-lg border border-border bg-secondary/30 p-4 space-y-3">
           <div>
@@ -137,11 +136,11 @@ const sections: DocSection[] = [
           </div>
           <div>
             <p className="font-semibold text-foreground">AMM (Automated Market Maker)</p>
-            <p>A constant-product market maker (x * y = k) that enables instant token swaps. Liquidity providers deposit equal-value token pairs and earn a share of trading fees. The AMM operates as an independent module but is integrated directly into the ArcLend interface.</p>
+            <p>A constant-product market maker (x * y = k) that enables instant token swaps. Liquidity providers deposit equal-value token pairs and earn a share of trading fees. The AMM operates as an independent module but is integrated directly into the Stelo interface.</p>
           </div>
           <div>
             <p className="font-semibold text-foreground">Staking Module</p>
-            <p>Manages ALND staking positions, lock periods, reward distribution, and governance voting weight. Rewards are drawn from protocol revenue, not emissions. The module enforces lock tiers and a 3-day unstaking warmup to prevent flash-staking attacks.</p>
+            <p>Manages STL staking positions, lock periods, reward distribution, and governance voting weight. Rewards are drawn from protocol revenue, not emissions. The module enforces lock tiers and a 3-day unstaking warmup to prevent flash-staking attacks.</p>
           </div>
           <div>
             <p className="font-semibold text-foreground">nTokens (Deposit Receipts)</p>
@@ -153,7 +152,7 @@ const sections: DocSection[] = [
           </div>
           <div>
             <p className="font-semibold text-foreground">Price Oracle</p>
-            <p>Feeds asset prices into collateral valuation, health factor calculations, and liquidation triggers. On mainnet, ArcLend will integrate with Rialo's native oracle infrastructure. On testnet, prices are simulated with minor fluctuations to demonstrate dynamic behavior.</p>
+            <p>Feeds asset prices into collateral valuation, health factor calculations, and liquidation triggers. On mainnet, Stelo will integrate with Rialo's native oracle infrastructure. On testnet, prices are simulated with minor fluctuations to demonstrate dynamic behavior.</p>
           </div>
           <div>
             <p className="font-semibold text-foreground">Liquidation Engine</p>
@@ -170,26 +169,20 @@ const sections: DocSection[] = [
     content: (
       <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
         <p>
-          The lending market is one of ArcLend's core modules. Users deposit assets to earn variable yield, or borrow against their collateral to access capital without selling their holdings.
+          The lending market is one of Stelo's core modules. Users deposit assets to earn variable yield, or borrow against their collateral to access capital without selling their holdings.
         </p>
         <div className="rounded-lg border border-border bg-secondary/30 p-4 space-y-3">
           <div>
             <p className="font-semibold text-foreground">Supplying Assets</p>
-            <p>
-              Depositing assets into the lending pool adds them to shared liquidity that borrowers draw from. You receive nTokens that appreciate as borrowers pay interest. Your deposit also serves as collateral: its value determines how much you can borrow.
-            </p>
+            <p>Depositing assets into the lending pool adds them to shared liquidity that borrowers draw from. You receive nTokens that appreciate as borrowers pay interest. Your deposit also serves as collateral: its value determines how much you can borrow.</p>
           </div>
           <div>
             <p className="font-semibold text-foreground">Borrowing Against Collateral</p>
-            <p>
-             Each asset has a 75% Loan-to-Value ratio. Supply $1,000 of RLO, and you can borrow up to $750 of any supported token. Borrowing creates vDebt tokens that track your growing obligation. Interest accrues continuously based on pool utilization.
-            </p>
+            <p>Each asset has a 75% Loan-to-Value ratio. Supply $1,000 of RLO, and you can borrow up to $750 of any supported token. Borrowing creates vDebt tokens that track your growing obligation. Interest accrues continuously based on pool utilization.</p>
           </div>
           <div>
             <p className="font-semibold text-foreground">Interest Rate Model</p>
-            <p>
-              ArcLend uses a two-slope interest rate curve. Below 80% utilization, rates climb gradually. Above 80%, rates increase steeply to discourage excessive borrowing and protect supplier withdrawals.
-            </p>
+            <p>Stelo uses a two-slope interest rate curve. Below 80% utilization, rates climb gradually. Above 80%, rates increase steeply to discourage excessive borrowing and protect supplier withdrawals.</p>
           </div>
           <div>
             <p className="font-semibold text-foreground">Key Parameters</p>
@@ -211,14 +204,12 @@ const sections: DocSection[] = [
     content: (
       <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
         <p>
-          The swap module lets users exchange any supported token for another directly within ArcLend. It runs on an automated market maker with no order books, no counterparty matching, and no waiting.
+          The swap module lets users exchange any supported token for another directly within Stelo. It runs on an automated market maker with no order books, no counterparty matching, and no waiting.
         </p>
         <div className="rounded-lg border border-border bg-secondary/30 p-4 space-y-3">
           <div>
             <p className="font-semibold text-foreground">How Swaps Work</p>
-            <p>
-               The AMM uses the constant product formula (x * y = k). When you swap RLO for USDT, you add RLO to the pool and remove USDT. The exchange rate is determined by the pool's current reserves. Larger trades relative to pool size result in more slippage because you are changing the reserve ratio more dramatically.
-            </p>
+            <p>The AMM uses the constant product formula (x * y = k). When you swap RLO for USDT, you add RLO to the pool and remove USDT. The exchange rate is determined by the pool's current reserves. Larger trades relative to pool size result in more slippage because you are changing the reserve ratio more dramatically.</p>
           </div>
           <div>
             <p className="font-semibold text-foreground">Fees</p>
@@ -226,13 +217,11 @@ const sections: DocSection[] = [
           </div>
           <div>
             <p className="font-semibold text-foreground">Available Pairs</p>
-            <p>RLO/USDT, RLO/WETH, USDT/WETH, ALND/USDT. Multi-hop routing is available when a direct pair does not exist.</p>
+            <p>RLO/USDT, RLO/WETH, USDT/WETH, STL/USDT. Multi-hop routing is available when a direct pair does not exist.</p>
           </div>
           <div>
-            <p className="font-semibold text-foreground">Why Swap Inside ArcLend?</p>
-            <p>
-              Having swaps within the protocol means users do not need to leave the platform to rebalance their portfolio. Need more USDT to repay a borrow position? Swap RLO for USDT and repay, all in one session. This composability between swap, lending, and staking reduces friction and keeps capital circulating within the ecosystem.
-            </p>
+            <p className="font-semibold text-foreground">Why Swap Inside Stelo?</p>
+            <p>Having swaps within the protocol means users do not need to leave the platform to rebalance their portfolio. Need more USDT to repay a borrow position? Swap RLO for USDT and repay, all in one session. This composability between swap, lending, and staking reduces friction and keeps capital circulating within the ecosystem.</p>
           </div>
         </div>
       </div>
@@ -250,9 +239,7 @@ const sections: DocSection[] = [
         <div className="rounded-lg border border-border bg-secondary/30 p-4 space-y-3">
           <div>
             <p className="font-semibold text-foreground">Adding Liquidity</p>
-            <p>
-              You deposit two tokens in equal dollar value. For example, $500 of RLO and $500 of USDT into the RLO/USDT pool. In return, you receive LP tokens representing your proportional share of the pool. As trades flow through the pool, fees accumulate and increase the value of your LP tokens.
-            </p>
+            <p>You deposit two tokens in equal dollar value. For example, $500 of RLO and $500 of USDT into the RLO/USDT pool. In return, you receive LP tokens representing your proportional share of the pool. As trades flow through the pool, fees accumulate and increase the value of your LP tokens.</p>
           </div>
           <div>
             <p className="font-semibold text-foreground">Earning Fees</p>
@@ -260,9 +247,7 @@ const sections: DocSection[] = [
           </div>
           <div>
             <p className="font-semibold text-foreground">Impermanent Loss</p>
-            <p>
-              When you provide liquidity, the token ratio in your position changes as trades occur. If one token's price moves significantly relative to the other, you end up with a different mix than you deposited. The value difference between holding the tokens outright versus providing liquidity is called impermanent loss. It becomes permanent only if you withdraw while prices are diverged. Trading fees can offset it, but it is a real risk to understand before depositing.
-            </p>
+            <p>When you provide liquidity, the token ratio in your position changes as trades occur. If one token's price moves significantly relative to the other, you end up with a different mix than you deposited. The value difference between holding the tokens outright versus providing liquidity is called impermanent loss. It becomes permanent only if you withdraw while prices are diverged. Trading fees can offset it, but it is a real risk to understand before depositing.</p>
           </div>
           <div>
             <p className="font-semibold text-foreground">Removing Liquidity</p>
@@ -275,26 +260,22 @@ const sections: DocSection[] = [
   {
     id: "staking",
     icon: <Lock className="h-4 w-4" />,
-    title: "ALND Staking",
+    title: "STL Staking",
     content: (
       <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
         <p>
-          Staking is how the community participates in the protocol's economics and governance. By locking ALND tokens, stakers earn a share of protocol revenue and gain voting power over proposals that shape the protocol's future.
+          Staking is how the community participates in the protocol's economics and governance. By locking STL tokens, stakers earn a share of protocol revenue and gain voting power over proposals that shape the protocol's future.
         </p>
         <div className="rounded-lg border border-border bg-secondary/30 p-4 space-y-3">
           <div>
             <p className="font-semibold text-foreground">Where Do Staking Rewards Come From?</p>
-            <p>
-              Staking rewards are funded entirely by protocol revenue, not by printing new tokens. Three revenue streams feed the staking rewards pool:
-            </p>
+            <p>Staking rewards are funded entirely by protocol revenue, not by printing new tokens. Three revenue streams feed the staking rewards pool:</p>
             <ul className="list-inside list-disc space-y-1 mt-2">
               <li><strong className="text-foreground">Borrowing interest reserve:</strong> 10% of all interest paid by borrowers is collected by the treasury. A portion of this is allocated to staking rewards.</li>
               <li><strong className="text-foreground">Swap fee share:</strong> 0.05% of every swap (from the 0.3% total fee) flows to the treasury and partially funds staker rewards.</li>
               <li><strong className="text-foreground">Liquidation fees:</strong> A small share of liquidation penalties contributes to the rewards pool.</li>
             </ul>
-            <p className="mt-2">
-              This design means rewards scale with protocol activity. Heavy lending, borrowing, and trading periods generate more revenue and more staker earnings. Quiet periods generate less. There is no reliance on inflationary emissions that dilute token holders over time.
-            </p>
+            <p className="mt-2">This design means rewards scale with protocol activity. Heavy lending, borrowing, and trading periods generate more revenue and more staker earnings. Quiet periods generate less. There is no reliance on inflationary emissions that dilute token holders over time.</p>
           </div>
           <div>
             <p className="font-semibold text-foreground">Lock Tiers & APY</p>
@@ -306,19 +287,15 @@ const sections: DocSection[] = [
               <li>180 days: 2x multiplier</li>
               <li>365 days: 3x multiplier</li>
             </ul>
-            <p className="mt-2">
-              Actual APY fluctuates based on total ALND staked and protocol revenue. The multipliers reward users who demonstrate longer-term commitment and help reduce circulating supply volatility.
-            </p>
+            <p className="mt-2">Actual APY fluctuates based on total STL staked and protocol revenue. The multipliers reward users who demonstrate longer-term commitment and help reduce circulating supply volatility.</p>
           </div>
           <div>
             <p className="font-semibold text-foreground">Unstaking & Warmup Period</p>
-            <p>
-              When you unstake, your ALND enters a 3-day warmup period before returning to your wallet. During warmup, the tokens do not earn rewards and cannot vote. This prevents flash-staking, where someone stakes briefly to capture rewards or influence a governance vote, then immediately withdraws.
-            </p>
+            <p>When you unstake, your STL enters a 3-day warmup period before returning to your wallet. During warmup, the tokens do not earn rewards and cannot vote. This prevents flash-staking, where someone stakes briefly to capture rewards or influence a governance vote, then immediately withdraws.</p>
           </div>
           <div>
             <p className="font-semibold text-foreground">Governance Power</p>
-            <p>1 staked ALND = 1 vote. Only staked tokens carry voting weight. Unstaked ALND in your wallet has zero governance power. This ensures decisions are made by participants with real commitment to the protocol.</p>
+            <p>1 staked STL = 1 vote. Only staked tokens carry voting weight. Unstaked STL in your wallet has zero governance power. This ensures decisions are made by participants with real commitment to the protocol.</p>
           </div>
         </div>
       </div>
@@ -331,13 +308,13 @@ const sections: DocSection[] = [
     content: (
       <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
         <p>
-          The health factor is the most important number for any borrower on ArcLend. It measures how safe your borrow position is relative to liquidation.
+          The health factor is the most important number for any borrower on Stelo. It measures how safe your borrow position is relative to liquidation.
         </p>
         <div className="rounded-lg border border-border bg-secondary/30 p-4 space-y-3">
           <div>
             <p className="font-semibold text-foreground">Calculation</p>
-             <p>Health Factor = (Total Collateral Value x Liquidation Threshold) / Total Debt Value</p>
-             <p className="mt-2">Example: $1,000 of RLO supplied (80% liquidation threshold) and $400 of USDT borrowed gives HF = ($1,000 x 0.80) / $400 = 2.0. That is a comfortable position.</p>
+            <p>Health Factor = (Total Collateral Value x Liquidation Threshold) / Total Debt Value</p>
+            <p className="mt-2">Example: $1,000 of RLO supplied (80% liquidation threshold) and $400 of USDT borrowed gives HF = ($1,000 x 0.80) / $400 = 2.0. That is a comfortable position.</p>
           </div>
           <div>
             <p className="font-semibold text-foreground">Risk Levels</p>
@@ -351,15 +328,11 @@ const sections: DocSection[] = [
           </div>
           <div>
             <p className="font-semibold text-foreground">Liquidation Process</p>
-            <p>
-              When HF drops below 1.0, a liquidator can repay up to 50% of the borrower's debt in one transaction and receive the equivalent collateral value plus a 5% bonus. This incentivizes third parties to keep the protocol solvent by clearing risky positions before they create bad debt.
-            </p>
+            <p>When HF drops below 1.0, a liquidator can repay up to 50% of the borrower's debt in one transaction and receive the equivalent collateral value plus a 5% bonus. This incentivizes third parties to keep the protocol solvent by clearing risky positions before they create bad debt.</p>
           </div>
           <div>
             <p className="font-semibold text-foreground">Alert System</p>
-            <p>
-              ArcLend's health monitor lets you configure threshold alerts. When your HF crosses a level you have set (1.5, 1.2, 1.0, or a custom value) you receive a notification. Email and Telegram alerts can be configured in the Health Monitor settings so you have time to act before liquidation occurs.
-            </p>
+            <p>Stelo's health monitor lets you configure threshold alerts. When your HF crosses a level you have set (1.5, 1.2, 1.0, or a custom value) you receive a notification. Email and Telegram alerts can be configured in the Health Monitor settings so you have time to act before liquidation occurs.</p>
           </div>
         </div>
       </div>
@@ -372,7 +345,7 @@ const sections: DocSection[] = [
     content: (
       <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
         <p>
-          ArcLend is governed by its community. Any user with staked ALND can participate in governance, and approved decisions are executed on-chain.
+          Stelo is governed by its community. Any user with staked STL can participate in governance, and approved decisions are executed on-chain.
         </p>
         <div className="rounded-lg border border-border bg-secondary/30 p-4 space-y-3">
           <div>
@@ -387,13 +360,11 @@ const sections: DocSection[] = [
           </div>
           <div>
             <p className="font-semibold text-foreground">Proposal Lifecycle</p>
-            <p>
-              Any user with at least 100 staked ALND can submit a proposal. Proposals enter a 3-day discussion period, followed by a 4-day voting window. Passing requires a simple majority (over 50% of votes cast in favor) and a minimum quorum of 10% of total staked ALND participating. Approved proposals execute automatically after a 2-day timelock.
-            </p>
+            <p>Any user with at least 100 staked STL can submit a proposal. Proposals enter a 3-day discussion period, followed by a 4-day voting window. Passing requires a simple majority (over 50% of votes cast in favor) and a minimum quorum of 10% of total staked STL participating. Approved proposals execute automatically after a 2-day timelock.</p>
           </div>
           <div>
             <p className="font-semibold text-foreground">Voting Weight</p>
-            <p>Voting power equals staked ALND. Locked positions carry full weight. Unstaked tokens have no governance power. This ensures that people making decisions for the protocol have real stake in its outcome.</p>
+            <p>Voting power equals staked STL. Locked positions carry full weight. Unstaked tokens have no governance power. This ensures that people making decisions for the protocol have real stake in its outcome.</p>
           </div>
         </div>
       </div>
@@ -415,12 +386,12 @@ const sections: DocSection[] = [
               <li>RLO: 100 tokens per claim</li>
               <li>WETH: 1 token per claim</li>
               <li>USDT: 1,000 tokens per claim</li>
-              <li>ALND: 100 tokens per claim</li>
+              <li>STL: 100 tokens per claim</li>
             </ul>
           </div>
-           <div>
-             <p className="font-semibold text-foreground">Cooldown</p>
-             <p>Each token has a 24-hour cooldown per wallet address. Cooldowns are tracked independently. You can claim RLO even if WETH is still on cooldown. A countdown timer shows exactly when each token becomes claimable again.</p>
+          <div>
+            <p className="font-semibold text-foreground">Cooldown</p>
+            <p>Each token has a 24-hour cooldown per wallet address. Cooldowns are tracked independently. You can claim RLO even if WETH is still on cooldown. A countdown timer shows exactly when each token becomes claimable again.</p>
           </div>
           <div>
             <p className="font-semibold text-foreground">Claim All</p>
@@ -437,7 +408,7 @@ const sections: DocSection[] = [
     content: (
       <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
         <p>
-          ArcLend includes a contract deployment interface for developers building on Rialo. Deploy standard smart contract templates directly from the browser with no local development environment needed.
+          Stelo includes a contract deployment interface for developers building on Rialo. Deploy standard smart contract templates directly from the browser with no local development environment needed.
         </p>
         <div className="rounded-lg border border-border bg-secondary/30 p-4 space-y-3">
           <div>
@@ -462,20 +433,20 @@ const sections: DocSection[] = [
     content: (
       <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
         <p>
-          Rialo is a high-throughput Layer 1 blockchain designed for low transaction fees and fast finality. ArcLend is built specifically for Rialo, taking advantage of its cost structure and performance characteristics.
+          Rialo is a high-throughput Layer 1 blockchain designed for low transaction fees and fast finality. Stelo is built specifically for Rialo, taking advantage of its cost structure and performance characteristics.
         </p>
         <div className="rounded-lg border border-border bg-secondary/30 p-4 space-y-3">
           <div>
             <p className="font-semibold text-foreground">Why Rialo</p>
             <p>Low fees make DeFi interactions economically viable for all users, not just large holders. On high-fee chains, a small borrow or swap can cost more in gas than the transaction is worth. On Rialo, every interaction, from a $10 swap to a $100,000 supply, has a negligible transaction cost.</p>
           </div>
-           <div>
-             <p className="font-semibold text-foreground">RLO Token</p>
-             <p>RLO is Rialo's native gas token. On ArcLend, it is also accepted as collateral in lending pools, used as a base pair for swaps, and distributed through the testnet faucet.</p>
+          <div>
+            <p className="font-semibold text-foreground">RLO Token</p>
+            <p>RLO is Rialo's native gas token. On Stelo, it is also accepted as collateral in lending pools, used as a base pair for swaps, and distributed through the testnet faucet.</p>
           </div>
           <div>
             <p className="font-semibold text-foreground">Connecting to Rialo Testnet</p>
-            <p>Connect your wallet (MetaMask or WalletConnect) through ArcLend's interface. The app handles network configuration automatically. On testnet, all transactions after wallet connection are simulated with no gas fees or signing prompts.</p>
+            <p>Connect your wallet (MetaMask or WalletConnect) through Stelo's interface. The app handles network configuration automatically. On testnet, all transactions after wallet connection are simulated with no gas fees or signing prompts.</p>
           </div>
         </div>
       </div>
@@ -488,7 +459,7 @@ const sections: DocSection[] = [
     content: (
       <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
         <p>
-          ArcLend is built with a modern, production-grade technology stack optimized for performance, developer experience, and Web3 integration.
+          Stelo is built with a modern, production-grade technology stack optimized for performance, developer experience, and Web3 integration.
         </p>
         <div className="rounded-lg border border-border bg-secondary/30 p-4 space-y-3">
           <div>
@@ -505,7 +476,7 @@ const sections: DocSection[] = [
           </div>
           <div>
             <p className="font-semibold text-foreground">Backend & Data</p>
-            <p><strong className="text-foreground">Supabase</strong> (via Lovable Cloud) handles database persistence, edge functions for notification dispatch (email & Telegram), and real-time subscriptions. <strong className="text-foreground">TanStack Query</strong> manages server state with caching and automatic refetching.</p>
+            <p><strong className="text-foreground">Lovable Cloud</strong> handles database persistence, backend functions for notification dispatch (email via Resend & Telegram Bot API), and real-time subscriptions. <strong className="text-foreground">TanStack Query</strong> manages server state with caching and automatic refetching.</p>
           </div>
           <div>
             <p className="font-semibold text-foreground">Data Visualization</p>
@@ -534,7 +505,7 @@ const sections: DocSection[] = [
             <p>• Framer Motion</p>
             <p>• wagmi + viem</p>
             <p>• RainbowKit</p>
-            <p>• Supabase JS</p>
+            <p>• Lovable Cloud</p>
             <p>• TanStack Query</p>
             <p>• Recharts</p>
             <p>• i18next</p>
@@ -587,7 +558,7 @@ export default function Docs() {
     <DashboardLayout>
       <div className="mb-6">
         <h1 className="text-xl font-bold text-foreground sm:text-2xl">Documentation</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Complete guide to ArcLend Protocol on Rialo Network.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Complete guide to Stelo Protocol on Rialo Network.</p>
       </div>
 
       <div className="flex flex-col gap-6 lg:flex-row">

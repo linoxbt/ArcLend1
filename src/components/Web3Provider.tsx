@@ -6,8 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { mainnet } from "wagmi/chains";
 
 const config = getDefaultConfig({
-  appName: "ArcLend",
-  projectId: "arclend-demo-project",
+  appName: "Stelo",
+  projectId: "stelo-protocol",
   chains: [mainnet],
   ssr: false,
 });

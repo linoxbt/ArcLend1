@@ -50,6 +50,110 @@ export type Database = {
         }
         Relationships: []
       }
+      forum_replies: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          thread_id: string
+          wallet_address: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          thread_id: string
+          wallet_address: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          thread_id?: string
+          wallet_address?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "forum_replies_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "forum_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      forum_threads: {
+        Row: {
+          body: string
+          category: string
+          created_at: string
+          id: string
+          is_pinned: boolean
+          replies_count: number
+          title: string
+          updated_at: string
+          wallet_address: string
+        }
+        Insert: {
+          body: string
+          category?: string
+          created_at?: string
+          id?: string
+          is_pinned?: boolean
+          replies_count?: number
+          title: string
+          updated_at?: string
+          wallet_address: string
+        }
+        Update: {
+          body?: string
+          category?: string
+          created_at?: string
+          id?: string
+          is_pinned?: boolean
+          replies_count?: number
+          title?: string
+          updated_at?: string
+          wallet_address?: string
+        }
+        Relationships: []
+      }
+      liquidation_log: {
+        Row: {
+          bonus_earned: number
+          borrower_address: string
+          collateral_asset: string
+          collateral_seized: number
+          created_at: string
+          debt_asset: string
+          debt_repaid: number
+          id: string
+          liquidator_address: string
+        }
+        Insert: {
+          bonus_earned: number
+          borrower_address: string
+          collateral_asset: string
+          collateral_seized: number
+          created_at?: string
+          debt_asset: string
+          debt_repaid: number
+          id?: string
+          liquidator_address: string
+        }
+        Update: {
+          bonus_earned?: number
+          borrower_address?: string
+          collateral_asset?: string
+          collateral_seized?: number
+          created_at?: string
+          debt_asset?: string
+          debt_repaid?: number
+          id?: string
+          liquidator_address?: string
+        }
+        Relationships: []
+      }
       price_alerts: {
         Row: {
           condition: string

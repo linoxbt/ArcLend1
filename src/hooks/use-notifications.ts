@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 interface NotificationPayload {
   wallet_address: string;
-  type: "price_alert" | "health_factor";
+  type: "price_alert" | "health_factor" | "liquidation";
   title: string;
   message: string;
 }
@@ -60,5 +60,17 @@ export function useNotifications() {
     [sendNotification]
   );
 
-  return { sendNotification, notifyPriceAlert, notifyHealthFactor };
+  const notifyLiquidation = useCallback(
+    async (borrowerAddress: string, collateral: string, debt: string, healthFactor: number) => {
+      return sendNotification({
+        wallet_address: borrowerAddress,
+        type: "liquidation",
+        title: "🚨 Position Liquidated",
+        message: `Your position has been partially liquidated. Collateral: ${collateral}, Debt repaid: ${debt}. Your health factor was ${healthFactor.toFixed(2)}. Add collateral to protect remaining positions.`,
+      });
+    },
+    [sendNotification]
+  );
+
+  return { sendNotification, notifyPriceAlert, notifyHealthFactor, notifyLiquidation };
 }
