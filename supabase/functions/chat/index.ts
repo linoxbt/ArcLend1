@@ -36,7 +36,7 @@ Stelo Finance is the Unified Liquidity Layer for Rialo Network. It combines lend
 - Users can configure alert thresholds and receive notifications via email or Telegram.
 
 6. FAUCET
-- Testnet faucet: 100 RLO, 1 WETH, 1,000 USDT, 100 STL. 24-hour cooldown.
+- Testnet faucet: 100 RLO, 1,000 USDT, 100 STL, 200 RIA. 24-hour cooldown.
 
 7. GOVERNANCE
 - STL holders who have staked can vote on protocol proposals.
