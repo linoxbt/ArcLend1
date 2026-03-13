@@ -23,7 +23,7 @@ Stelo Finance is the Unified Liquidity Layer for Rialo Network. It combines lend
 - A 0.3% swap fee is charged on every trade. Users can configure slippage tolerance.
 
 3. LIQUIDITY POOLS
-- Users can provide liquidity to pairs like RLO/USDT, RLO/WETH, USDT/WETH, STL/USDT.
+- Users can provide liquidity to pairs like RLO/USDT, RLO/STL, STL/USDT, RIA/USDT.
 - Liquidity providers earn a share of the 0.3% trading fees proportional to their share of the pool.
 
 4. STAKING
