@@ -46,8 +46,8 @@ const proposals: Proposal[] = [
     votingDays: 4,
     category: "Parameters",
     changes: [
-      "WETH collateral factor: 78% → 82%",
-      "No change to liquidation threshold (remains 85%)",
+      "RLO collateral factor: 75% → 80%",
+      "No change to liquidation threshold (remains 80%)",
       "No change to liquidation penalty (remains 5%)",
     ],
   },
