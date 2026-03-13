@@ -32,9 +32,9 @@ interface Proposal {
 const proposals: Proposal[] = [
   {
     id: 1,
-    title: "Increase WETH collateral factor to 82%",
-    description: "Adjust the WETH collateral factor from 78% to 82% to improve capital efficiency.",
-    fullDescription: "This proposal seeks to increase the WETH collateral factor from the current 78% to 82%. WETH has consistently maintained strong liquidity and low volatility relative to other collateral types on Stelo. Increasing the collateral factor will allow borrowers to access more capital against their WETH deposits, improving capital efficiency without significantly increasing liquidation risk.\n\nThe risk analysis shows that even during the most volatile 24-hour period in the past 6 months, WETH's price movement would not have triggered additional liquidations at the proposed 82% threshold. The liquidation engine's 5% bonus remains sufficient to incentivize timely liquidations.\n\nThis change aligns with industry standards — major lending protocols on Ethereum mainnet use 80-85% collateral factors for WETH.",
+    title: "Increase RLO collateral factor to 80%",
+    description: "Adjust the RLO collateral factor from 75% to 80% to improve capital efficiency.",
+    fullDescription: "This proposal seeks to increase the RLO collateral factor from the current 75% to 80%. RLO has consistently maintained strong liquidity and low volatility relative to other collateral types on Stelo Finance. Increasing the collateral factor will allow borrowers to access more capital against their RLO deposits, improving capital efficiency without significantly increasing liquidation risk.\n\nThe risk analysis shows that even during the most volatile 24-hour period in the past 6 months, RLO's price movement would not have triggered additional liquidations at the proposed 80% threshold. The liquidation engine's 5% bonus remains sufficient to incentivize timely liquidations.\n\nThis change aligns with industry standards — major lending protocols use 75-85% collateral factors for native tokens.",
     status: "active",
     forVotes: 1250000,
     againstVotes: 320000,
