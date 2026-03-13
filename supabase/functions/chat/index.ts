@@ -28,7 +28,7 @@ Stelo Finance is the Unified Liquidity Layer for Rialo Network. It combines lend
 
 4. STAKING
 - Stake STL tokens to earn staking rewards. Rewards come from protocol revenue.
-- Lock tiers: Flexible (4% APY, 1x), 30 days (5% APY, 1.25x), 90 days (6% APY, 1.5x), 180 days (8% APY, 2x), 365 days (12% APY, 3x).
+- Lock tiers: Flexible (8% APY, 1x), 30 days (10% APY, 1.25x), 90 days (12% APY, 1.5x), 180 days (16% APY, 2x), 365 days (24% APY, 3x).
 - Unstaking has a 3-day warmup period. Staked STL grants governance voting power (1 staked STL = 1 vote).
 
 5. HEALTH FACTOR & ALERTS
